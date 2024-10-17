@@ -1,0 +1,32 @@
+# Rider ile ilgili geçici dosyalar
+.idea/
+*.iml
+
+# Visual Studio ve Rider Build dosyaları
+bin/
+obj/
+
+# C# ile ilgili geçici dosyalar
+*.dll
+*.exe
+*.pdb
+*.cache
+*.sourcelink.json
+
+# Proje dosyaları
+*.csproj.FileListAbsolute.txt
+*.csproj.nuget.g.props
+
+# Dotnet restore/nuget geçici dosyaları
+*.nuget.g.props
+*.nuget.g.targets
+
+# MacOS sistem dosyaları
+.DS_Store
+
+# Log dosyaları
+*.log
+
+# Rider ile ilgili geçici dosyalar
+rider.project.model.nuget.info
+rider.project.restore.info
