@@ -25,6 +25,18 @@ builder.Services.AddScoped<IRecipeImagesRepository, RecipeImagesRepository>();
 
 builder.Services.AddScoped<IRecipeRateReadingService, RecipeRateReadingService>();
 builder.Services.AddScoped<IRecipeRateRepository, RecipeRateRepository>();
+
+builder.Services.AddScoped<IRecipeIngredientRepository, RecipeIngredientRepository>();
+builder.Services.AddScoped<IRecipeIngredientReadingService, RecipeIngredientReadingService>();
+
+builder.Services.AddScoped<IRecipeStepRepository, RecipeStepRepository>();
+builder.Services.AddScoped<IRecipeStepReadingService, RecipeStepReadingService>();
+
+builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
+builder.Services.AddScoped<IAllergyReadingService, AllergyReadingService>();
+
+builder.Services.AddScoped<IDietTypeRepository, DietTypeRepository>();
+builder.Services.AddScoped<IDietTypeReadingService, DietTypeReadingService>();
 #endregion
 
 
