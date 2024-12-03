@@ -5,9 +5,9 @@ namespace _8bits_app_api.Repositories
 {
     public class RecipeRepository : IRecipeRepository
     {
-        private readonly MyDbContext _context;
+        private readonly mydbcontext _context;
 
-        public RecipeRepository(MyDbContext context)
+        public RecipeRepository(mydbcontext context)
         {
             _context = context;
         }

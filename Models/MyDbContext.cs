@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _8bits_app_api.Models;
 
-public partial class MyDbContext : DbContext
+public partial class mydbcontext : DbContext
 {
-    public MyDbContext()
+    public mydbcontext()
     {
     }
 
-    public MyDbContext(DbContextOptions<MyDbContext> options)
+    public mydbcontext(DbContextOptions<mydbcontext> options)
         : base(options)
     {
     }
@@ -24,8 +24,6 @@ public partial class MyDbContext : DbContext
     public virtual DbSet<FavoriteRecipe> FavoriteRecipes { get; set; }
 
     public virtual DbSet<Ingredient> Ingredients { get; set; }
-
-    public virtual DbSet<IngredientImage> IngredientImages { get; set; }
 
     public virtual DbSet<Recipe> Recipes { get; set; }
 
@@ -47,27 +45,25 @@ public partial class MyDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:sqlserver7roeurp45oi7c.database.windows.net,1433;Initial Catalog=8bits;Persist Security Info=False;User ID=8_bits_admin;Password=dirsen-qafjy8-poqfEd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        => optionsBuilder.UseSqlServer("Server=tcp:34.32.36.210,1433;Initial Catalog=8bitsdevelopment;Persist Security Info=False;User ID=taylan;Password=SecurePasswordForTaylan123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Allergy>(entity =>
         {
-            entity.HasKey(e => e.AllerjiId);
-
             entity.ToTable("allergies");
 
-            entity.Property(e => e.AllerjiId)
+            entity.Property(e => e.AllergyId)
                 .ValueGeneratedNever()
-                .HasColumnName("allerji_id");
-            entity.Property(e => e.AllerjiBilgisi)
+                .HasColumnName("allergy_id");
+            entity.Property(e => e.AllergenInfo)
                 .HasMaxLength(50)
-                .HasColumnName("allerji_bilgisi");
+                .HasColumnName("allergen_info");
         });
 
         modelBuilder.Entity<DietPreference>(entity =>
         {
-            entity.HasKey(e => e.DietPreferenceId).HasName("PK__diet_pre__379065036CE7E69F");
+            entity.HasKey(e => e.DietPreferenceId).HasName("PK__diet_pre__37906503D3A46A81");
 
             entity.ToTable("diet_preferences");
 
@@ -77,18 +73,22 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.DietType).WithMany(p => p.DietPreferences)
                 .HasForeignKey(d => d.DietTypeId)
-                .HasConstraintName("FK__diet_pref__diet___7B5B524B");
+                .HasConstraintName("FK__diet_pref__diet___4316F928");
+
+            entity.HasOne(d => d.User).WithMany(p => p.DietPreferences)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__diet_pref__user___4222D4EF");
         });
 
         modelBuilder.Entity<DietType>(entity =>
         {
-            entity.HasKey(e => e.DietTypeId).HasName("PK__diet_typ__B5E6540376F83958");
-
             entity.ToTable("diet_types");
 
-            entity.Property(e => e.DietTypeId).HasColumnName("diet_type_id");
+            entity.Property(e => e.DietTypeId)
+                .ValueGeneratedNever()
+                .HasColumnName("diet_type_id");
             entity.Property(e => e.DietTypeExplanation)
-                .HasColumnType("text")
+                .HasMaxLength(100)
                 .HasColumnName("diet_type_explanation");
             entity.Property(e => e.DietTypeName)
                 .HasMaxLength(50)
@@ -97,7 +97,7 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<FavoriteRecipe>(entity =>
         {
-            entity.HasKey(e => e.FavId).HasName("PK__favorite__37AAF6FE57FC32CC");
+            entity.HasKey(e => e.FavId).HasName("PK__favorite__37AAF6FE3C700F7B");
 
             entity.ToTable("favorite_recipes");
 
@@ -107,15 +107,17 @@ public partial class MyDbContext : DbContext
 
             entity.HasOne(d => d.Recipe).WithMany(p => p.FavoriteRecipes)
                 .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("FK__favorite___recip__2B0A656D");
+                .HasConstraintName("FK__favorite___recip__46E78A0C");
 
             entity.HasOne(d => d.User).WithMany(p => p.FavoriteRecipes)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__favorite___user___282DF8C2");
+                .HasConstraintName("FK__favorite___user___45F365D3");
         });
 
         modelBuilder.Entity<Ingredient>(entity =>
         {
+            entity.HasKey(e => e.IngredientId).HasName("PK_Ingredients");
+
             entity.ToTable("ingredients");
 
             entity.Property(e => e.IngredientId)
@@ -125,26 +127,8 @@ public partial class MyDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("detailed_allergen_info_tr");
             entity.Property(e => e.IngredientName)
-                .HasMaxLength(50)
+                .HasMaxLength(70)
                 .HasColumnName("ingredient_name");
-            entity.Property(e => e.PageUrl)
-                .HasMaxLength(100)
-                .HasColumnName("page_url");
-        });
-
-        modelBuilder.Entity<IngredientImage>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("ingredient_images");
-
-            entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
-            entity.Property(e => e.IngredientName)
-                .HasMaxLength(50)
-                .HasColumnName("ingredient_name");
-            entity.Property(e => e.IngredientNameEn)
-                .HasMaxLength(50)
-                .HasColumnName("ingredient_name_en");
             entity.Property(e => e.PageUrl)
                 .HasMaxLength(100)
                 .HasColumnName("page_url");
@@ -152,6 +136,8 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<Recipe>(entity =>
         {
+            entity.HasKey(e => e.RecipeId).HasName("pk_recipeid");
+
             entity.ToTable("recipes");
 
             entity.Property(e => e.RecipeId)
@@ -173,7 +159,7 @@ public partial class MyDbContext : DbContext
                 .HasColumnName("preparation_time");
             entity.Property(e => e.Protein).HasColumnName("protein");
             entity.Property(e => e.RecipeName)
-                .HasMaxLength(100)
+                .HasMaxLength(70)
                 .HasColumnName("recipe_name");
             entity.Property(e => e.Serving)
                 .HasMaxLength(50)
@@ -182,32 +168,36 @@ public partial class MyDbContext : DbContext
 
         modelBuilder.Entity<RecipeImage>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("recipe_images");
+            entity.HasKey(e => e.RecipeId).HasName("PK_Recipe_images");
 
+            entity.ToTable("recipe_images");
+
+            entity.Property(e => e.RecipeId)
+                .ValueGeneratedNever()
+                .HasColumnName("recipe_id");
             entity.Property(e => e.ImageLink)
                 .HasMaxLength(150)
                 .HasColumnName("image_link");
-            entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
             entity.Property(e => e.RecipeName)
-                .HasMaxLength(100)
+                .HasMaxLength(70)
                 .HasColumnName("recipe_name");
 
-            entity.HasOne(d => d.Recipe).WithMany()
-                .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("FK__recipe_im__recip__236943A5");
+            entity.HasOne(d => d.Recipe).WithOne(p => p.RecipeImage)
+                .HasForeignKey<RecipeImage>(d => d.RecipeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_recipe_images_recipes");
         });
 
         modelBuilder.Entity<RecipeIngredient>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("recipe_ingredients");
+            entity.HasKey(e => e.RecipeingredientId).HasName("PK_Recipe_ingredients");
 
+            entity.ToTable("recipe_ingredients");
+
+            entity.Property(e => e.RecipeingredientId).HasColumnName("recipeingredient_id");
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
             entity.Property(e => e.IngredientName)
-                .HasMaxLength(100)
+                .HasMaxLength(70)
                 .HasColumnName("ingredient_name");
             entity.Property(e => e.Quantity)
                 .HasMaxLength(50)
@@ -216,59 +206,48 @@ public partial class MyDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("quantity_type");
             entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
-
-            entity.HasOne(d => d.Ingredient).WithMany()
-                .HasForeignKey(d => d.IngredientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__recipe_in__ingre__160F4887");
-
-            entity.HasOne(d => d.Recipe).WithMany()
-                .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("FK__recipe_in__recip__1DB06A4F");
         });
 
         modelBuilder.Entity<RecipeRate>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("recipe_rates");
+            entity.HasKey(e => e.RecipeId);
 
-            entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
+            entity.ToTable("recipe_rates");
+
+            entity.Property(e => e.RecipeId)
+                .ValueGeneratedNever()
+                .HasColumnName("recipe_id");
             entity.Property(e => e.RecipeName)
-                .HasMaxLength(50)
+                .HasMaxLength(70)
                 .HasColumnName("recipe_name");
             entity.Property(e => e.RecipeRate1).HasColumnName("recipe_rate");
-
-            entity.HasOne(d => d.Recipe).WithMany()
-                .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("FK__recipe_ra__recip__25518C17");
         });
 
         modelBuilder.Entity<RecipeStep>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("recipe_steps");
+            entity.HasKey(e => e.RecipestepsId).HasName("PK_Recipe_steps");
 
+            entity.ToTable("recipe_steps");
+
+            entity.Property(e => e.RecipestepsId).HasColumnName("recipesteps_id");
             entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
             entity.Property(e => e.RecipeName)
-                .HasMaxLength(100)
+                .HasMaxLength(70)
                 .HasColumnName("recipe_name");
             entity.Property(e => e.Step)
-                .HasMaxLength(800)
+                .HasMaxLength(700)
                 .HasColumnName("step");
-            entity.Property(e => e.StepNum)
-                .HasMaxLength(30)
-                .HasColumnName("step_num");
+            entity.Property(e => e.StepNum).HasColumnName("step_num");
 
-            entity.HasOne(d => d.Recipe).WithMany()
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeSteps)
                 .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("FK__recipe_st__recip__1F98B2C1");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_recipe_steps_recipes");
         });
 
         modelBuilder.Entity<ShoppingList>(entity =>
         {
-            entity.HasKey(e => e.ShoppingListId).HasName("PK__shopping__0659AC3A320C8AF2");
+            entity.HasKey(e => e.ShoppingListId).HasName("PK__shopping__0659AC3AE1DA9E3D");
 
             entity.ToTable("shopping_list");
 
@@ -276,22 +255,23 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
             entity.Property(e => e.Quantity)
                 .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("quantity");
             entity.Property(e => e.QuantityTypeId).HasColumnName("quantity_type_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Ingredient).WithMany(p => p.ShoppingLists)
                 .HasForeignKey(d => d.IngredientId)
-                .HasConstraintName("FK__shopping___ingre__123EB7A3");
+                .HasConstraintName("FK__shopping___ingre__4CA06362");
 
             entity.HasOne(d => d.User).WithMany(p => p.ShoppingLists)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__shopping___user___114A936A");
+                .HasConstraintName("FK__shopping___user___4BAC3F29");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__users__B9BE370FE2493D1B");
+            entity.HasKey(e => e.UserId).HasName("PK__users__B9BE370F67628C46");
 
             entity.ToTable("users");
 
@@ -301,45 +281,44 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.DietPreferenceId).HasColumnName("diet_preference_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
+                .IsUnicode(false)
                 .HasColumnName("email");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
+                .IsUnicode(false)
                 .HasColumnName("name");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(255)
+                .IsUnicode(false)
                 .HasColumnName("password_hash");
 
             entity.HasOne(d => d.Allergy).WithMany(p => p.Users)
                 .HasForeignKey(d => d.AllergyId)
-                .HasConstraintName("FK__users__allergy_i__2CF2ADDF");
+                .HasConstraintName("FK_users_user_allergies");
 
             entity.HasOne(d => d.DietPreference).WithMany(p => p.Users)
                 .HasForeignKey(d => d.DietPreferenceId)
-                .HasConstraintName("FK__users__diet_pref__2BFE89A6");
+                .HasConstraintName("FK__users__diet_pref__5EBF139D");
         });
 
         modelBuilder.Entity<UserAllergy>(entity =>
         {
-            entity.HasKey(e => e.UserAllergyId).HasName("PK__user_all__0A15CE10476328C7");
+            entity.HasKey(e => e.UserAllergyId).HasName("PK__user_all__0A15CE105113DEA6");
 
             entity.ToTable("user_allergies");
 
             entity.Property(e => e.UserAllergyId).HasColumnName("user_allergy_id");
-            entity.Property(e => e.AllergenId).HasColumnName("allergen_id");
+            entity.Property(e => e.AllergyId).HasColumnName("allergy_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.Allergen).WithMany(p => p.UserAllergies)
-                .HasForeignKey(d => d.AllergenId)
-                .HasConstraintName("FK__user_alle__aller__18EBB532");
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserAllergies)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__user_alle__user___208CD6FA");
+            entity.HasOne(d => d.Allergy).WithMany(p => p.UserAllergies)
+                .HasForeignKey(d => d.AllergyId)
+                .HasConstraintName("FK__user_alle__aller__59FA5E80");
         });
 
         modelBuilder.Entity<UserInventory>(entity =>
         {
-            entity.HasKey(e => e.InventoryId).HasName("PK__user_inv__B59ACC4914E99E73");
+            entity.HasKey(e => e.InventoryId).HasName("PK__user_inv__B59ACC499DB2C4F5");
 
             entity.ToTable("user_inventory");
 
@@ -348,17 +327,18 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
             entity.Property(e => e.Quantity)
                 .HasMaxLength(50)
+                .IsUnicode(false)
                 .HasColumnName("quantity");
             entity.Property(e => e.QuantityTypeId).HasColumnName("quantity_type_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Ingredient).WithMany(p => p.UserInventories)
                 .HasForeignKey(d => d.IngredientId)
-                .HasConstraintName("FK__user_inve__ingre__10566F31");
+                .HasConstraintName("FK__user_inve__ingre__5DCAEF64");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserInventories)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__user_inve__user___2DE6D218");
+                .HasConstraintName("FK__user_inve__user___5CD6CB2B");
         });
 
         OnModelCreatingPartial(modelBuilder);

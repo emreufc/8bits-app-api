@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("8bits-app-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98ea51463976f3fee6732149cd26e07b51782366")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bd43e0ca30fb874c25a59764b1605370fd54437")]
 [assembly: System.Reflection.AssemblyProductAttribute("8bits-app-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("8bits-app-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -9,11 +9,9 @@ public partial class UserAllergy
 
     public int? UserId { get; set; }
 
-    public int? AllergenId { get; set; }
+    public int? AllergyId { get; set; }
 
-    public virtual Allergy? Allergen { get; set; }
-
-    public virtual User? User { get; set; }
+    public virtual Allergy? Allergy { get; set; }
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

@@ -5,7 +5,7 @@ namespace _8bits_app_api.Models;
 
 public partial class Recipe
 {
-    public short RecipeId { get; set; }
+    public int RecipeId { get; set; }
 
     public string RecipeName { get; set; } = null!;
 
@@ -26,4 +26,8 @@ public partial class Recipe
     public double Fat { get; set; }
 
     public virtual ICollection<FavoriteRecipe> FavoriteRecipes { get; set; } = new List<FavoriteRecipe>();
+
+    public virtual RecipeImage? RecipeImage { get; set; }
+
+    public virtual ICollection<RecipeStep> RecipeSteps { get; set; } = new List<RecipeStep>();
 }

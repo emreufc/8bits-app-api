@@ -3,20 +3,60 @@
   "WorkspaceRootPath": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\interfaces\\irecipeimagesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:interfaces\\irecipeimagesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\interfaces\\iingredientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:interfaces\\iingredientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\controllers\\recipeimagescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:controllers\\recipeimagescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\controllers\\8bitsdbcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:controllers\\8bitsdbcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\services\\recipeimagereadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:services\\recipeimagereadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\models\\mydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:models\\mydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\interfaces\\irecipeimagesreadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:interfaces\\irecipeimagesreadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\repositories\\recipeimagesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:repositories\\recipeimagesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\interfaces\\irecipereadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:interfaces\\irecipereadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\repositories\\ingredientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:repositories\\ingredientrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\services\\ingredientreadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:services\\ingredientreadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\controllers\\ingredientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:controllers\\ingredientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\services\\recipereadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:services\\recipereadingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|c:\\users\\taylan\\source\\repos\\8bits-app-api\\repositories\\reciperepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFD8097C-C01C-49FE-9F00-5902695E7862}|8bits-app-api.csproj|solutionrelative:repositories\\reciperepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +66,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -45,59 +85,185 @@
               "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "appsettings.Development.json",
-              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\appsettings.Development.json",
-              "RelativeToolTip": "appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-11-20T18:40:09.889Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAnAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "RecipeImagesController.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\RecipeImagesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\RecipeImagesController.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\RecipeImagesController.cs",
+              "RelativeToolTip": "Controllers\\RecipeImagesController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAzwA8AAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T18:39:07.051Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "8bitsDbController.cs",
-              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\8bitsDbController.cs",
-              "RelativeDocumentMoniker": "Controllers\\8bitsDbController.cs",
-              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\8bitsDbController.cs",
-              "RelativeToolTip": "Controllers\\8bitsDbController.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA7wC4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T18:37:09.69Z",
+              "WhenOpened": "2024-12-03T17:50:05.749Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "MyDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Models\\MyDbContext.cs",
-              "RelativeDocumentMoniker": "Models\\MyDbContext.cs",
-              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Models\\MyDbContext.cs",
-              "RelativeToolTip": "Models\\MyDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAfAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T18:33:53.29Z",
+              "WhenOpened": "2024-12-03T17:48:07.864Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IIngredientRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IIngredientRepository.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IIngredientRepository.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IIngredientRepository.cs",
+              "RelativeToolTip": "Interfaces\\IIngredientRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:45:50.151Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IRecipeImagesRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IRecipeImagesRepository.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IRecipeImagesRepository.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IRecipeImagesRepository.cs",
+              "RelativeToolTip": "Interfaces\\IRecipeImagesRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:45:45.326Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IRecipeImagesReadingService.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IRecipeImagesReadingService.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IRecipeImagesReadingService.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IRecipeImagesReadingService.cs",
+              "RelativeToolTip": "Interfaces\\IRecipeImagesReadingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:17:23.017Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RecipesController.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\RecipesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\RecipesController.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\RecipesController.cs",
+              "RelativeToolTip": "Controllers\\RecipesController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAswDIAAABiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T16:18:32.933Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "RecipeImageReadingService.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Services\\RecipeImageReadingService.cs",
+              "RelativeDocumentMoniker": "Services\\RecipeImageReadingService.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Services\\RecipeImageReadingService.cs",
+              "RelativeToolTip": "Services\\RecipeImageReadingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAUAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:34:27.342Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RecipeImagesRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Repositories\\RecipeImagesRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\RecipeImagesRepository.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Repositories\\RecipeImagesRepository.cs",
+              "RelativeToolTip": "Repositories\\RecipeImagesRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:23:41.026Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IRecipeReadingService.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IRecipeReadingService.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IRecipeReadingService.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Interfaces\\IRecipeReadingService.cs",
+              "RelativeToolTip": "Interfaces\\IRecipeReadingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:45:53.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IngredientRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Repositories\\IngredientRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\IngredientRepository.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Repositories\\IngredientRepository.cs",
+              "RelativeToolTip": "Repositories\\IngredientRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:45:27.821Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IngredientReadingService.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Services\\IngredientReadingService.cs",
+              "RelativeDocumentMoniker": "Services\\IngredientReadingService.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Services\\IngredientReadingService.cs",
+              "RelativeToolTip": "Services\\IngredientReadingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T17:45:09.234Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IngredientController.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\IngredientController.cs",
+              "RelativeDocumentMoniker": "Controllers\\IngredientController.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Controllers\\IngredientController.cs",
+              "RelativeToolTip": "Controllers\\IngredientController.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAwwDEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-03T16:53:15.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "RecipeRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Repositories\\RecipeRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\RecipeRepository.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Repositories\\RecipeRepository.cs",
+              "RelativeToolTip": "Repositories\\RecipeRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-20T18:51:18.939Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "RecipeReadingService.cs",
+              "DocumentMoniker": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Services\\RecipeReadingService.cs",
+              "RelativeDocumentMoniker": "Services\\RecipeReadingService.cs",
+              "ToolTip": "C:\\Users\\Taylan\\source\\repos\\8bits-app-api\\Services\\RecipeReadingService.cs",
+              "RelativeToolTip": "Services\\RecipeReadingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-20T18:45:11.493Z",
               "EditorCaption": ""
             }
           ]
