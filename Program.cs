@@ -22,6 +22,9 @@ builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
 
 builder.Services.AddScoped<IRecipeImagesReadingService, RecipeImageReadingService>();
 builder.Services.AddScoped<IRecipeImagesRepository, RecipeImagesRepository>();
+
+builder.Services.AddScoped<IRecipeRateReadingService, RecipeRateReadingService>();
+builder.Services.AddScoped<IRecipeRateRepository, RecipeRateRepository>();
 #endregion
 
 

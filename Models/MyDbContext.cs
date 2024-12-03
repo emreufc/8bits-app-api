@@ -220,7 +220,7 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.RecipeName)
                 .HasMaxLength(70)
                 .HasColumnName("recipe_name");
-            entity.Property(e => e.RecipeRate1).HasColumnName("recipe_rate");
+            entity.Property(e => e.RecipesRate).HasColumnName("recipe_rate");
         });
 
         modelBuilder.Entity<RecipeStep>(entity =>

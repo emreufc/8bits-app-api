@@ -9,5 +9,5 @@ public partial class RecipeRate
 
     public string RecipeName { get; set; } = null!;
 
-    public double RecipeRate1 { get; set; }
+    public double RecipesRate { get; set; }
 }
