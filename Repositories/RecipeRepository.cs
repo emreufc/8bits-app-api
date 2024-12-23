@@ -12,9 +12,16 @@ namespace _8bits_app_api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Recipe>> GetAllRecipesAsync()
+        public async Task<(IEnumerable<Recipe> recipes, int totalCount)> GetAllRecipesAsync(int pageNumber, int pageSize)
         {
-            return await _context.Recipes.ToListAsync();
+            var totalCount = await _context.Recipes.Where(p => p.IsDeleted == false).CountAsync();
+            var recipes = await _context.Recipes
+                .Where(p => p.IsDeleted == false)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (recipes, totalCount);
         }
 
         public async Task<Recipe> GetRecipeByIdAsync(int id)

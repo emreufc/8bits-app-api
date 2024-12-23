@@ -11,7 +11,11 @@ public partial class UserAllergy
 
     public int? AllergyId { get; set; }
 
-    public virtual Allergy? Allergy { get; set; }
+    public bool? IsDeleted { get; set; }
+
+    public virtual Allergen? Allergy { get; set; }
+
+    public virtual User? User { get; set; }
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

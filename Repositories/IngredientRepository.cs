@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _8bits_app_api.Repositories
 {
-    public class IngredientRepository :  IIngredientRepository
+    public class IngredientRepository : IIngredientRepository
     {
         private readonly mydbcontext _context;
 
@@ -13,14 +13,21 @@ namespace _8bits_app_api.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Ingredient>> GetAllIngredientAsync()
+        public async Task<(IEnumerable<Ingredient> ingredients, int totalCount)> GetPaginatedAsync(int pageNumber, int pageSize)
         {
-            return await _context.Ingredients.ToListAsync();
+            var totalCount = await _context.Ingredients.Where(p => p.IsDeleted == false).CountAsync();
+            var ingredients = await _context.Ingredients.Where(p => p.IsDeleted == false)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (ingredients, totalCount);
         }
 
-        public async Task<Ingredient> GetIngredientByIdAsync(int id)
+        public async Task<Ingredient> GetByIdAsync(int id)
         {
             return await _context.Ingredients.FindAsync(id);
         }
     }
+
 }

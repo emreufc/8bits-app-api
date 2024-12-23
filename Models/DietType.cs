@@ -7,9 +7,11 @@ public partial class DietType
 {
     public int DietTypeId { get; set; }
 
-    public string DietTypeName { get; set; } = null!;
+    public string? DietTypeName { get; set; }
 
-    public string DietTypeExplanation { get; set; } = null!;
+    public string? DietTypeExplanation { get; set; }
+
+    public bool? IsDeleted { get; set; }
 
     public virtual ICollection<DietPreference> DietPreferences { get; set; } = new List<DietPreference>();
 }

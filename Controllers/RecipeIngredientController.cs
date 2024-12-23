@@ -1,7 +1,6 @@
 ﻿using _8bits_app_api.Models;
-using Microsoft.AspNetCore.Http;
+using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace _8_bits.Controllers
 {
@@ -9,24 +8,34 @@ namespace _8_bits.Controllers
     [ApiController]
     public class RecipeIngredientController : ControllerBase
     {
-        private readonly mydbcontext _context;
+        private readonly IRecipeIngredientReadingService _recipeIngredientService;
 
-        public RecipeIngredientController(mydbcontext context)
+        public RecipeIngredientController(IRecipeIngredientReadingService recipeIngredientService)
         {
-            _context = context;
+            _recipeIngredientService = recipeIngredientService;
         }
 
-        // GET: api/Recipes
+        // GET: api/RecipeIngredient
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeIngredient>>> GetRecipeIngredient()
+        public async Task<IActionResult> GetRecipeIngredients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var recipeIngredients = await _context.RecipeIngredients.ToListAsync();
-            if (recipeIngredients == null || recipeIngredients.Count == 0)
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
+
+            var (recipeIngredients, totalCount) = await _recipeIngredientService.GetRecipeIngredientsPaginatedAsync(pageNumber, pageSize);
+            if (recipeIngredients == null || !recipeIngredients.Any())
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = "No Recipe ingredients found in the database. Please ensure that Recipe ingredients have been added before querying.",
+                    message = "No recipe ingredients found in the database. Please ensure that recipe ingredients have been added before querying.",
                     data = (object)null
                 });
             }
@@ -34,23 +43,29 @@ namespace _8_bits.Controllers
             return Ok(new
             {
                 code = 200,
-                message = $"Successfully retrieved {recipeIngredients.Count()} Recipe ingredients from the database.",
-                data = recipeIngredients
+                message = $"Successfully retrieved {recipeIngredients.Count()} recipe ingredients from the database.",
+                data = recipeIngredients,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
             });
         }
 
-        // GET: api/Recipes/5
+        // GET: api/RecipeIngredient/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<RecipeIngredient>> GetRecipeIngredient(int id)
+        public async Task<IActionResult> GetRecipeIngredient(int id)
         {
-            var recipeIngredient = await _context.RecipeIngredients.FindAsync(id);
-
+            var recipeIngredient = await _recipeIngredientService.GetRecipeIngredientByIdAsync(id);
             if (recipeIngredient == null)
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = $"No Recipe ingredient found with ID {id}. Please check the ID and try again.",
+                    message = $"No recipe ingredient found with ID {id}. Please check the ID and try again.",
                     data = (object)null
                 });
             }
@@ -63,21 +78,27 @@ namespace _8_bits.Controllers
             });
         }
 
-        // GET: api/RecipeIngredients/recipe/{recipeId}
+        // GET: api/RecipeIngredient/recipe/{recipeId}
         [HttpGet("recipe/{recipeId}")]
-        public async Task<ActionResult> GetRecipeIngredientsByRecipeId(int recipeId)
+        public async Task<IActionResult> GetRecipeIngredientsByRecipeId(int recipeId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var recipeIngredients = await _context.RecipeIngredients
-                                                   .Where(ri => ri.RecipeId == recipeId)
-                                                   .OrderBy(ri => ri.IngredientId) // Opsiyonel
-                                                   .ToListAsync();
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
 
-            if (recipeIngredients == null || recipeIngredients.Count == 0)
+            var (recipeIngredients, totalCount) = await _recipeIngredientService.GetRecipeIngredientsByRecipeIdPaginatedAsync(recipeId, pageNumber, pageSize);
+            if (recipeIngredients == null || !recipeIngredients.Any())
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = $"No Recipe ingredients found with Recipe ID {recipeId}. Please check the Recipe ID and try again.",
+                    message = $"No recipe ingredients found with Recipe ID {recipeId}. Please check the Recipe ID and try again.",
                     data = (object)null
                 });
             }
@@ -85,10 +106,16 @@ namespace _8_bits.Controllers
             return Ok(new
             {
                 code = 200,
-                message = $"Successfully retrieved {recipeIngredients.Count} ingredients for Recipe ID {recipeId}.",
-                data = recipeIngredients
+                message = $"Successfully retrieved {recipeIngredients.Count()} ingredients for Recipe ID {recipeId}.",
+                data = recipeIngredients,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
             });
         }
-
     }
 }

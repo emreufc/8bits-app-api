@@ -4,9 +4,9 @@ namespace _8bits_app_api.Services
 {
     public interface IRecipeIngredientReadingService
     {
-        Task<IEnumerable<RecipeIngredient>> GetAllRecipeIngredientAsync();
+        Task<(IEnumerable<RecipeIngredient> recipeIngredients, int totalCount)> GetRecipeIngredientsPaginatedAsync(int pageNumber, int pageSize);
         Task<RecipeIngredient> GetRecipeIngredientByIdAsync(int id);
-        Task<IEnumerable<RecipeIngredient>> GetRecipeIngredientsByRecipeIdAsync(int recipeId);
-
+        Task<(IEnumerable<RecipeIngredient> recipeIngredients, int totalCount)> GetRecipeIngredientsByRecipeIdPaginatedAsync(int recipeId, int pageNumber, int pageSize);
     }
+
 }

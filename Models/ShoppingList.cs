@@ -15,7 +15,11 @@ public partial class ShoppingList
 
     public string? Quantity { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual Ingredient? Ingredient { get; set; }
+
+    public virtual QuantityType? QuantityType { get; set; }
 
     public virtual User? User { get; set; }
 }

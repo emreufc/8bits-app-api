@@ -11,13 +11,17 @@ public partial class UserInventory
 
     public int? IngredientId { get; set; }
 
-    public string? Quantity { get; set; }
+    public DateOnly? ExpiryDate { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public double? Quantity { get; set; }
 
     public int? QuantityTypeId { get; set; }
 
-    public DateOnly? ExpiryDate { get; set; }
-
     public virtual Ingredient? Ingredient { get; set; }
+
+    public virtual QuantityType? QuantityType { get; set; }
 
     public virtual User? User { get; set; }
 }

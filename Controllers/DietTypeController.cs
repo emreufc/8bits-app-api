@@ -1,7 +1,5 @@
-﻿using _8bits_app_api.Models;
-using Microsoft.AspNetCore.Http;
+﻿using _8bits_app_api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace _8_bits.Controllers
 {
@@ -9,19 +7,29 @@ namespace _8_bits.Controllers
     [ApiController]
     public class DietTypeController : ControllerBase
     {
-        private readonly mydbcontext _context;
+        private readonly IDietTypeReadingService _dietTypeReadingService;
 
-        public DietTypeController(mydbcontext context)
+        public DietTypeController(IDietTypeReadingService dietTypeReadingService)
         {
-            _context = context;
+            _dietTypeReadingService = dietTypeReadingService;
         }
 
         // GET: api/DietType
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DietType>>> GetDietType()
+        public async Task<IActionResult> GetDietTypes([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var dietTypes = await _context.DietTypes.ToListAsync();
-            if (dietTypes == null || dietTypes.Count == 0)
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
+
+            var (dietTypes, totalCount) = await _dietTypeReadingService.GetDietTypesPaginatedAsync(pageNumber, pageSize);
+            if (dietTypes == null || !dietTypes.Any())
             {
                 return NotFound(new
                 {
@@ -35,16 +43,22 @@ namespace _8_bits.Controllers
             {
                 code = 200,
                 message = $"Successfully retrieved {dietTypes.Count()} diet types from the database.",
-                data = dietTypes
+                data = dietTypes,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
             });
         }
 
         // GET: api/DietType/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DietType>> GetDietType(int id)
+        public async Task<IActionResult> GetDietType(int id)
         {
-            var dietType = await _context.DietTypes.FindAsync(id);
-
+            var dietType = await _dietTypeReadingService.GetDietTypeByIdAsync(id);
             if (dietType == null)
             {
                 return NotFound(new

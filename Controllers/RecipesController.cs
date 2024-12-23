@@ -17,9 +17,19 @@ namespace Recipes.Controllers
 
         // GET: api/Recipes
         [HttpGet]
-        public async Task<IActionResult> GetRecipes()
+        public async Task<IActionResult> GetRecipes([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var recipes = await _recipeReadingService.GetAllRecipesAsync();
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
+
+            var (recipes, totalCount) = await _recipeReadingService.GetAllRecipesAsync(pageNumber, pageSize);
             if (recipes == null || !recipes.Any())
             {
                 return NotFound(new
@@ -34,7 +44,14 @@ namespace Recipes.Controllers
             {
                 code = 200,
                 message = $"Successfully retrieved {recipes.Count()} recipes from the database.",
-                data = recipes
+                data = recipes,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
             });
         }
 

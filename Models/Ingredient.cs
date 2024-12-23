@@ -9,9 +9,15 @@ public partial class Ingredient
 
     public string IngredientName { get; set; } = null!;
 
-    public string? PageUrl { get; set; }
+    public string? IngImgUrl { get; set; }
 
-    public string DetailedAllergenInfoTr { get; set; } = null!;
+    public int? AllergenId { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public virtual Allergen? Allergen { get; set; }
+
+    public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
 
     public virtual ICollection<ShoppingList> ShoppingLists { get; set; } = new List<ShoppingList>();
 

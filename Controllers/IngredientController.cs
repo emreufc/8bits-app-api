@@ -8,24 +8,34 @@ namespace Ingredients.Controllers
     [ApiController]
     public class IngredientsController : ControllerBase
     {
-        private readonly IIngredientReadingService _IngredientReadingService;
+        private readonly IIngredientReadingService _ingredientReadingService;
 
         public IngredientsController(IIngredientReadingService ingredientReadingService)
         {
-            _IngredientReadingService = ingredientReadingService;
+            _ingredientReadingService = ingredientReadingService;
         }
 
         // GET: api/Ingredients
         [HttpGet]
-        public async Task<IActionResult> GetIngredients()
+        public async Task<IActionResult> GetIngredients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var Ingredients = await _IngredientReadingService.GetAllIngredientAsync();
-            if (Ingredients == null || !Ingredients.Any())
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
+
+            var (ingredients, totalCount) = await _ingredientReadingService.GetIngredientsPaginatedAsync(pageNumber, pageSize);
+            if (ingredients == null || !ingredients.Any())
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = "No Ingredients found in the database. Please ensure that Ingredients have been added before querying.",
+                    message = "No ingredients found in the database. Please ensure that ingredients have been added before querying.",
                     data = (object)null
                 });
             }
@@ -33,8 +43,15 @@ namespace Ingredients.Controllers
             return Ok(new
             {
                 code = 200,
-                message = $"Successfully retrieved {Ingredients.Count()} Ingredients from the database.",
-                data = Ingredients
+                message = $"Successfully retrieved {ingredients.Count()} ingredients from the database.",
+                data = ingredients,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
             });
         }
 
@@ -42,13 +59,13 @@ namespace Ingredients.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetIngredient(int id)
         {
-            var Ingredient = await _IngredientReadingService.GetIngredientByIdAsync(id);
-            if (Ingredient == null)
+            var ingredient = await _ingredientReadingService.GetIngredientByIdAsync(id);
+            if (ingredient == null)
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = $"No Ingredient found with ID {id}. Please check the ID and try again.",
+                    message = $"No ingredient found with ID {id}. Please check the ID and try again.",
                     data = (object)null
                 });
             }
@@ -57,7 +74,7 @@ namespace Ingredients.Controllers
             {
                 code = 200,
                 message = $"Ingredient with ID {id} retrieved successfully.",
-                data = Ingredient
+                data = ingredient
             });
         }
     }

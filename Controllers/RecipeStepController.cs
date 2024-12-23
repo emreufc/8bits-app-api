@@ -1,7 +1,6 @@
 ﻿using _8bits_app_api.Models;
-using Microsoft.AspNetCore.Http;
+using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace _8_bits.Controllers
 {
@@ -9,24 +8,34 @@ namespace _8_bits.Controllers
     [ApiController]
     public class RecipeStepController : ControllerBase
     {
-        private readonly mydbcontext _context;
+        private readonly IRecipeStepReadingService _recipeStepService;
 
-        public RecipeStepController(mydbcontext context)
+        public RecipeStepController(IRecipeStepReadingService recipeStepService)
         {
-            _context = context;
+            _recipeStepService = recipeStepService;
         }
 
-        // GET: api/Recipes
+        // GET: api/RecipeStep
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeStep>>> GetRecipeStep()
+        public async Task<IActionResult> GetRecipeSteps([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var recipeSteps = await _context.RecipeSteps.ToListAsync();
-            if (recipeSteps == null || recipeSteps.Count == 0)
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
+
+            var (recipeSteps, totalCount) = await _recipeStepService.GetRecipeStepsPaginatedAsync(pageNumber, pageSize);
+            if (recipeSteps == null || !recipeSteps.Any())
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = "No Recipe steps found in the database. Please ensure that Recipe steps have been added before querying.",
+                    message = "No recipe steps found in the database. Please ensure that recipe steps have been added before querying.",
                     data = (object)null
                 });
             }
@@ -34,23 +43,29 @@ namespace _8_bits.Controllers
             return Ok(new
             {
                 code = 200,
-                message = $"Successfully retrieved {recipeSteps.Count()} Recipe steps from the database.",
-                data = recipeSteps
+                message = $"Successfully retrieved {recipeSteps.Count()} recipe steps from the database.",
+                data = recipeSteps,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
             });
         }
 
-        // GET: api/Recipes/5
+        // GET: api/RecipeStep/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RecipeStep>> GetRecipeStep(int id)
+        public async Task<IActionResult> GetRecipeStep(int id)
         {
-            var recipeStep = await _context.RecipeSteps.FindAsync(id);
-
+            var recipeStep = await _recipeStepService.GetRecipeStepByIdAsync(id);
             if (recipeStep == null)
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = $"No Recipe step found with ID {id}. Please check the ID and try again.",
+                    message = $"No recipe step found with ID {id}. Please check the ID and try again.",
                     data = (object)null
                 });
             }
@@ -63,20 +78,27 @@ namespace _8_bits.Controllers
             });
         }
 
-        // GET: api/Recipes/steps/recipe/{recipeId}
+        // GET: api/RecipeStep/steps/recipe/{recipeId}
         [HttpGet("steps/recipe/{recipeId}")]
-        public async Task<ActionResult> GetRecipeStepsByRecipeId(int recipeId)
+        public async Task<IActionResult> GetRecipeStepsByRecipeId(int recipeId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var recipeSteps = await _context.RecipeSteps
-                                            .Where(rs => rs.RecipeId == recipeId)
-                                            .ToListAsync();
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
 
-            if (recipeSteps == null || recipeSteps.Count == 0)
+            var (recipeSteps, totalCount) = await _recipeStepService.GetRecipeStepsByRecipeIdPaginatedAsync(recipeId, pageNumber, pageSize);
+            if (recipeSteps == null || !recipeSteps.Any())
             {
                 return NotFound(new
                 {
                     code = 404,
-                    message = $"No Recipe steps found with Recipe ID {recipeId}. Please check the Recipe ID and try again.",
+                    message = $"No recipe steps found with Recipe ID {recipeId}. Please check the Recipe ID and try again.",
                     data = (object)null
                 });
             }
@@ -84,10 +106,16 @@ namespace _8_bits.Controllers
             return Ok(new
             {
                 code = 200,
-                message = $"Successfully retrieved {recipeSteps.Count} steps for Recipe ID {recipeId}.",
-                data = recipeSteps
+                message = $"Successfully retrieved {recipeSteps.Count()} steps for Recipe ID {recipeId}.",
+                data = recipeSteps,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
             });
         }
-
     }
 }

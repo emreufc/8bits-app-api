@@ -4,7 +4,7 @@ namespace _8bits_app_api.Interfaces
 {
     public interface IIngredientRepository
     {
-        Task<IEnumerable<Ingredient>> GetAllIngredientAsync();
-        Task<Ingredient> GetIngredientByIdAsync(int id);
+        Task<(IEnumerable<Ingredient> ingredients, int totalCount)> GetPaginatedAsync(int pageNumber, int pageSize);
+        Task<Ingredient> GetByIdAsync(int id);
     }
 }

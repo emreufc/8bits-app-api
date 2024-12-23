@@ -9,11 +9,17 @@ public partial class RecipeIngredient
 
     public int IngredientId { get; set; }
 
-    public string IngredientName { get; set; } = null!;
+    public double Quantity { get; set; }
 
-    public string Quantity { get; set; } = null!;
+    public int QuantityTypeId { get; set; }
 
-    public string QuantityType { get; set; } = null!;
+    public int RecipeIngredientId { get; set; }
 
-    public int RecipeingredientId { get; set; }
+    public bool? IsDeleted { get; set; }
+
+    public virtual Ingredient Ingredient { get; set; } = null!;
+
+    public virtual QuantityType QuantityType { get; set; } = null!;
+
+    public virtual Recipe Recipe { get; set; } = null!;
 }

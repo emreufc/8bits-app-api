@@ -19,6 +19,12 @@ public partial class User
 
     public int? DietPreferenceId { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
+    public string? PasswordSalt { get; set; }
+
+    public string? Role { get; set; }
+
     public virtual UserAllergy? Allergy { get; set; }
 
     public virtual DietPreference? DietPreference { get; set; }
@@ -29,5 +35,9 @@ public partial class User
 
     public virtual ICollection<ShoppingList> ShoppingLists { get; set; } = new List<ShoppingList>();
 
+    public virtual ICollection<UserAllergy> UserAllergies { get; set; } = new List<UserAllergy>();
+
     public virtual ICollection<UserInventory> UserInventories { get; set; } = new List<UserInventory>();
+
+    public virtual ICollection<UserRefreshToken> UserRefreshTokens { get; set; } = new List<UserRefreshToken>();
 }

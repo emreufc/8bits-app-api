@@ -11,6 +11,8 @@ public partial class DietPreference
 
     public int? DietTypeId { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual DietType? DietType { get; set; }
 
     public virtual User? User { get; set; }

@@ -15,7 +15,7 @@ public partial class mydbcontext : DbContext
     {
     }
 
-    public virtual DbSet<Allergy> Allergies { get; set; }
+    public virtual DbSet<Allergen> Allergens { get; set; }
 
     public virtual DbSet<DietPreference> DietPreferences { get; set; }
 
@@ -25,13 +25,11 @@ public partial class mydbcontext : DbContext
 
     public virtual DbSet<Ingredient> Ingredients { get; set; }
 
+    public virtual DbSet<QuantityType> QuantityTypes { get; set; }
+
     public virtual DbSet<Recipe> Recipes { get; set; }
 
-    public virtual DbSet<RecipeImage> RecipeImages { get; set; }
-
     public virtual DbSet<RecipeIngredient> RecipeIngredients { get; set; }
-
-    public virtual DbSet<RecipeRate> RecipeRates { get; set; }
 
     public virtual DbSet<RecipeStep> RecipeSteps { get; set; }
 
@@ -43,216 +41,244 @@ public partial class mydbcontext : DbContext
 
     public virtual DbSet<UserInventory> UserInventories { get; set; }
 
+    public virtual DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:34.32.36.210,1433;Initial Catalog=8bitsdevelopment;Persist Security Info=False;User ID=taylan;Password=SecurePasswordForTaylan123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
+        => optionsBuilder.UseSqlServer("Server=185.240.104.86\\SQLEXPRESS;Initial Catalog=8bitsdev;Persist Security Info=False;User ID=sa;Password=LWJLY23ikONQr4j;Encrypt=False;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Allergy>(entity =>
+        modelBuilder.Entity<Allergen>(entity =>
         {
-            entity.ToTable("allergies");
+            entity.ToTable("allergen");
 
-            entity.Property(e => e.AllergyId)
+            entity.Property(e => e.AllergenId)
                 .ValueGeneratedNever()
-                .HasColumnName("allergy_id");
-            entity.Property(e => e.AllergenInfo)
+                .HasColumnName("allergen_id");
+            entity.Property(e => e.AllergenName)
                 .HasMaxLength(50)
-                .HasColumnName("allergen_info");
+                .HasColumnName("allergen_name");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
         });
 
         modelBuilder.Entity<DietPreference>(entity =>
         {
-            entity.HasKey(e => e.DietPreferenceId).HasName("PK__diet_pre__37906503D3A46A81");
+            entity.HasKey(e => e.DietPreferenceId).HasName("PK__diet_pre__37906503BDC69427");
 
             entity.ToTable("diet_preferences");
 
             entity.Property(e => e.DietPreferenceId).HasColumnName("diet_preference_id");
             entity.Property(e => e.DietTypeId).HasColumnName("diet_type_id");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.DietType).WithMany(p => p.DietPreferences)
                 .HasForeignKey(d => d.DietTypeId)
-                .HasConstraintName("FK__diet_pref__diet___4316F928");
+                .HasConstraintName("FK_diet_preferences_diet_type_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.DietPreferences)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__diet_pref__user___4222D4EF");
+                .HasConstraintName("FK_diet_preferences_user_id");
         });
 
         modelBuilder.Entity<DietType>(entity =>
         {
+            entity.HasKey(e => e.DietTypeId).HasName("diet_types_pk");
+
             entity.ToTable("diet_types");
 
             entity.Property(e => e.DietTypeId)
                 .ValueGeneratedNever()
                 .HasColumnName("diet_type_id");
             entity.Property(e => e.DietTypeExplanation)
-                .HasMaxLength(100)
+                .HasColumnType("text")
                 .HasColumnName("diet_type_explanation");
             entity.Property(e => e.DietTypeName)
-                .HasMaxLength(50)
+                .HasColumnType("text")
                 .HasColumnName("diet_type_name");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
         });
 
         modelBuilder.Entity<FavoriteRecipe>(entity =>
         {
-            entity.HasKey(e => e.FavId).HasName("PK__favorite__37AAF6FE3C700F7B");
+            entity.HasKey(e => e.FavId).HasName("PK__favorite__37AAF6FE9C4253CE");
 
             entity.ToTable("favorite_recipes");
 
             entity.Property(e => e.FavId).HasColumnName("fav_id");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Recipe).WithMany(p => p.FavoriteRecipes)
                 .HasForeignKey(d => d.RecipeId)
-                .HasConstraintName("FK__favorite___recip__46E78A0C");
+                .HasConstraintName("FK_favorite_recipes_recipe_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.FavoriteRecipes)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__favorite___user___45F365D3");
+                .HasConstraintName("FK_favorite_recipes_user_id");
         });
 
         modelBuilder.Entity<Ingredient>(entity =>
         {
-            entity.HasKey(e => e.IngredientId).HasName("PK_Ingredients");
-
             entity.ToTable("ingredients");
 
             entity.Property(e => e.IngredientId)
                 .ValueGeneratedNever()
                 .HasColumnName("ingredient_id");
-            entity.Property(e => e.DetailedAllergenInfoTr)
-                .HasMaxLength(50)
-                .HasColumnName("detailed_allergen_info_tr");
+            entity.Property(e => e.AllergenId).HasColumnName("allergen_id");
+            entity.Property(e => e.IngImgUrl)
+                .HasMaxLength(250)
+                .HasColumnName("ing_img_url");
             entity.Property(e => e.IngredientName)
                 .HasMaxLength(70)
                 .HasColumnName("ingredient_name");
-            entity.Property(e => e.PageUrl)
-                .HasMaxLength(100)
-                .HasColumnName("page_url");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+
+            entity.HasOne(d => d.Allergen).WithMany(p => p.Ingredients)
+                .HasForeignKey(d => d.AllergenId)
+                .HasConstraintName("FK_ingredients_allergen_id");
+        });
+
+        modelBuilder.Entity<QuantityType>(entity =>
+        {
+            entity.ToTable("quantity_types");
+
+            entity.Property(e => e.QuantityTypeId)
+                .ValueGeneratedNever()
+                .HasColumnName("quantity_type_id");
+            entity.Property(e => e.Amount).HasColumnName("amount");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.QuantityTypeDesc)
+                .HasMaxLength(50)
+                .HasColumnName("quantity_type_desc");
         });
 
         modelBuilder.Entity<Recipe>(entity =>
         {
-            entity.HasKey(e => e.RecipeId).HasName("pk_recipeid");
-
             entity.ToTable("recipes");
 
             entity.Property(e => e.RecipeId)
                 .ValueGeneratedNever()
                 .HasColumnName("recipe_id");
-            entity.Property(e => e.Calorie)
-                .HasMaxLength(50)
-                .HasColumnName("calorie");
-            entity.Property(e => e.Carbohydrates).HasColumnName("carbohydrates");
-            entity.Property(e => e.Category)
-                .HasMaxLength(50)
-                .HasColumnName("category");
-            entity.Property(e => e.CookTime)
-                .HasMaxLength(50)
-                .HasColumnName("cook_time");
+            entity.Property(e => e.Carbohydrate).HasColumnName("carbohydrate");
+            entity.Property(e => e.CookingTime).HasColumnName("cooking_time");
+            entity.Property(e => e.DairyFree)
+                .HasDefaultValue(false)
+                .HasColumnName("Dairy_Free");
             entity.Property(e => e.Fat).HasColumnName("fat");
-            entity.Property(e => e.PreparationTime)
-                .HasMaxLength(50)
-                .HasColumnName("preparation_time");
+            entity.Property(e => e.Flexitarian).HasDefaultValue(false);
+            entity.Property(e => e.GlutenFree)
+                .HasDefaultValue(false)
+                .HasColumnName("Gluten_Free");
+            entity.Property(e => e.GramPerServing).HasColumnName("gram_per_serving");
+            entity.Property(e => e.ImageUrl)
+                .HasMaxLength(250)
+                .HasColumnName("image_url");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.KcalPerServing).HasColumnName("kcal_per_serving");
+            entity.Property(e => e.Keto).HasDefaultValue(false);
+            entity.Property(e => e.LowCarb)
+                .HasDefaultValue(false)
+                .HasColumnName("Low_Carb");
+            entity.Property(e => e.Mediterranean).HasDefaultValue(false);
+            entity.Property(e => e.Normal).HasDefaultValue(false);
+            entity.Property(e => e.Paleo).HasDefaultValue(false);
+            entity.Property(e => e.PersonCount).HasColumnName("person_count");
+            entity.Property(e => e.Pescatarian).HasDefaultValue(false);
+            entity.Property(e => e.PreparationTime).HasColumnName("preparation_time");
             entity.Property(e => e.Protein).HasColumnName("protein");
             entity.Property(e => e.RecipeName)
-                .HasMaxLength(70)
-                .HasColumnName("recipe_name");
-            entity.Property(e => e.Serving)
                 .HasMaxLength(50)
-                .HasColumnName("serving");
-        });
-
-        modelBuilder.Entity<RecipeImage>(entity =>
-        {
-            entity.HasKey(e => e.RecipeId).HasName("PK_Recipe_images");
-
-            entity.ToTable("recipe_images");
-
-            entity.Property(e => e.RecipeId)
-                .ValueGeneratedNever()
-                .HasColumnName("recipe_id");
-            entity.Property(e => e.ImageLink)
-                .HasMaxLength(150)
-                .HasColumnName("image_link");
-            entity.Property(e => e.RecipeName)
-                .HasMaxLength(70)
                 .HasColumnName("recipe_name");
-
-            entity.HasOne(d => d.Recipe).WithOne(p => p.RecipeImage)
-                .HasForeignKey<RecipeImage>(d => d.RecipeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_recipe_images_recipes");
+            entity.Property(e => e.RecipeRate).HasColumnName("recipe_rate");
+            entity.Property(e => e.Vegan)
+                .HasDefaultValue(false)
+                .HasColumnName("vegan");
+            entity.Property(e => e.Vegetarian).HasDefaultValue(false);
         });
 
         modelBuilder.Entity<RecipeIngredient>(entity =>
         {
-            entity.HasKey(e => e.RecipeingredientId).HasName("PK_Recipe_ingredients");
+            entity.HasKey(e => e.RecipeIngredientId).HasName("recipe_ingredients_pk");
 
             entity.ToTable("recipe_ingredients");
 
-            entity.Property(e => e.RecipeingredientId).HasColumnName("recipeingredient_id");
+            entity.Property(e => e.RecipeIngredientId).HasColumnName("recipe_ingredient_id");
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
-            entity.Property(e => e.IngredientName)
-                .HasMaxLength(70)
-                .HasColumnName("ingredient_name");
-            entity.Property(e => e.Quantity)
-                .HasMaxLength(50)
-                .HasColumnName("quantity");
-            entity.Property(e => e.QuantityType)
-                .HasMaxLength(50)
-                .HasColumnName("quantity_type");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.QuantityTypeId).HasColumnName("quantity_type_id");
             entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
-        });
 
-        modelBuilder.Entity<RecipeRate>(entity =>
-        {
-            entity.HasKey(e => e.RecipeId);
+            entity.HasOne(d => d.Ingredient).WithMany(p => p.RecipeIngredients)
+                .HasForeignKey(d => d.IngredientId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_recipe_ingredients_ingredient_id");
 
-            entity.ToTable("recipe_rates");
+            entity.HasOne(d => d.QuantityType).WithMany(p => p.RecipeIngredients)
+                .HasForeignKey(d => d.QuantityTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_recipe_ingredients_quantity_type_id");
 
-            entity.Property(e => e.RecipeId)
-                .ValueGeneratedNever()
-                .HasColumnName("recipe_id");
-            entity.Property(e => e.RecipeName)
-                .HasMaxLength(70)
-                .HasColumnName("recipe_name");
-            entity.Property(e => e.RecipesRate).HasColumnName("recipe_rate");
+            entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeIngredients)
+                .HasForeignKey(d => d.RecipeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_recipe_ingredients_recipe_id");
         });
 
         modelBuilder.Entity<RecipeStep>(entity =>
         {
-            entity.HasKey(e => e.RecipestepsId).HasName("PK_Recipe_steps");
+            entity.HasKey(e => e.RecipeStepsId).HasName("recipe_steps_pk");
 
             entity.ToTable("recipe_steps");
 
-            entity.Property(e => e.RecipestepsId).HasColumnName("recipesteps_id");
+            entity.Property(e => e.RecipeStepsId)
+                .ValueGeneratedNever()
+                .HasColumnName("recipe_steps_id");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.RecipeId).HasColumnName("recipe_id");
             entity.Property(e => e.RecipeName)
                 .HasMaxLength(70)
                 .HasColumnName("recipe_name");
-            entity.Property(e => e.Step)
-                .HasMaxLength(700)
-                .HasColumnName("step");
+            entity.Property(e => e.Step).HasColumnName("step");
             entity.Property(e => e.StepNum).HasColumnName("step_num");
 
             entity.HasOne(d => d.Recipe).WithMany(p => p.RecipeSteps)
                 .HasForeignKey(d => d.RecipeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_recipe_steps_recipes");
+                .HasConstraintName("FK_recipe_steps_recipe_id");
         });
 
         modelBuilder.Entity<ShoppingList>(entity =>
         {
-            entity.HasKey(e => e.ShoppingListId).HasName("PK__shopping__0659AC3AE1DA9E3D");
+            entity.HasKey(e => e.ShoppingListId).HasName("PK__shopping__0659AC3A78049965");
 
             entity.ToTable("shopping_list");
 
             entity.Property(e => e.ShoppingListId).HasColumnName("shopping_list_id");
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.Quantity)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -262,16 +288,20 @@ public partial class mydbcontext : DbContext
 
             entity.HasOne(d => d.Ingredient).WithMany(p => p.ShoppingLists)
                 .HasForeignKey(d => d.IngredientId)
-                .HasConstraintName("FK__shopping___ingre__4CA06362");
+                .HasConstraintName("FK_shopping_list_ingredient_id");
+
+            entity.HasOne(d => d.QuantityType).WithMany(p => p.ShoppingLists)
+                .HasForeignKey(d => d.QuantityTypeId)
+                .HasConstraintName("FK_shopping_list_quantity_type_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.ShoppingLists)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__shopping___user___4BAC3F29");
+                .HasConstraintName("FK_shopping_list_user_id");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__users__B9BE370F67628C46");
+            entity.HasKey(e => e.UserId).HasName("PK__users__B9BE370FC57A27D3");
 
             entity.ToTable("users");
 
@@ -283,6 +313,9 @@ public partial class mydbcontext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("email");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -291,54 +324,88 @@ public partial class mydbcontext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("password_hash");
+            entity.Property(e => e.PasswordSalt).HasColumnName("password_salt");
+            entity.Property(e => e.Role)
+                .HasMaxLength(50)
+                .HasColumnName("role");
 
             entity.HasOne(d => d.Allergy).WithMany(p => p.Users)
                 .HasForeignKey(d => d.AllergyId)
-                .HasConstraintName("FK_users_user_allergies");
+                .HasConstraintName("FK_users_allergy_id");
 
             entity.HasOne(d => d.DietPreference).WithMany(p => p.Users)
                 .HasForeignKey(d => d.DietPreferenceId)
-                .HasConstraintName("FK__users__diet_pref__5EBF139D");
+                .HasConstraintName("FK_users_diet_preference_id");
         });
 
         modelBuilder.Entity<UserAllergy>(entity =>
         {
-            entity.HasKey(e => e.UserAllergyId).HasName("PK__user_all__0A15CE105113DEA6");
+            entity.HasKey(e => e.UserAllergyId).HasName("PK__user_all__0A15CE1036155AFD");
 
             entity.ToTable("user_allergies");
 
             entity.Property(e => e.UserAllergyId).HasColumnName("user_allergy_id");
             entity.Property(e => e.AllergyId).HasColumnName("allergy_id");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Allergy).WithMany(p => p.UserAllergies)
                 .HasForeignKey(d => d.AllergyId)
-                .HasConstraintName("FK__user_alle__aller__59FA5E80");
+                .HasConstraintName("FK_user_allergies_allergy_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserAllergies)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_user_allergies_user_id");
         });
 
         modelBuilder.Entity<UserInventory>(entity =>
         {
-            entity.HasKey(e => e.InventoryId).HasName("PK__user_inv__B59ACC499DB2C4F5");
+            entity.HasKey(e => e.InventoryId).HasName("PK__user_inv__B59ACC49B6090E47");
 
             entity.ToTable("user_inventory");
 
             entity.Property(e => e.InventoryId).HasColumnName("inventory_id");
             entity.Property(e => e.ExpiryDate).HasColumnName("expiry_date");
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
-            entity.Property(e => e.Quantity)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("quantity");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.QuantityTypeId).HasColumnName("quantity_type_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Ingredient).WithMany(p => p.UserInventories)
                 .HasForeignKey(d => d.IngredientId)
-                .HasConstraintName("FK__user_inve__ingre__5DCAEF64");
+                .HasConstraintName("FK_user_inventory_ingredient_id");
+
+            entity.HasOne(d => d.QuantityType).WithMany(p => p.UserInventories)
+                .HasForeignKey(d => d.QuantityTypeId)
+                .HasConstraintName("FK_quantity_type_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserInventories)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__user_inve__user___5CD6CB2B");
+                .HasConstraintName("FK_user_inventory_user_id");
+        });
+
+        modelBuilder.Entity<UserRefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.UserRefreshTokenId).HasName("PK__user_ref__341ED6BEF5CE9ABB");
+
+            entity.ToTable("user_refresh_tokens");
+
+            entity.Property(e => e.UserRefreshTokenId).HasColumnName("user_refresh_token_id");
+            entity.Property(e => e.ExpirationDate)
+                .HasColumnType("datetime")
+                .HasColumnName("expiration_date");
+            entity.Property(e => e.RefreshToken).HasColumnName("refresh_token");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserRefreshTokens)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_user_refresh_tokens_users");
         });
 
         OnModelCreatingPartial(modelBuilder);
