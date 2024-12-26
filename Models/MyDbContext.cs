@@ -367,7 +367,6 @@ public partial class mydbcontext : DbContext
             entity.ToTable("user_inventory");
 
             entity.Property(e => e.InventoryId).HasColumnName("inventory_id");
-            entity.Property(e => e.ExpiryDate).HasColumnName("expiry_date");
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)

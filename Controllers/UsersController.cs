@@ -23,18 +23,6 @@ namespace _8bits_app_api.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateUser([FromBody] User updatedUser)
         {
-            //var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            //if (userIdClaim == null)
-            //{
-            //    return Unauthorized(new
-            //    {
-            //        code = 401,
-            //        message = "Unauthorized. User ID not found in token.",
-            //        data = (object)null
-            //    });
-            //}
-
-            //var userId = int.Parse(userIdClaim.Value);
             var userId = GetCurrentUserId();
             var result = await _userService.UpdateUserAsync(userId, updatedUser);
             if (!result)

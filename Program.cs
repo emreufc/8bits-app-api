@@ -97,6 +97,9 @@ builder.Services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenReposito
 
 builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
 builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
+
+builder.Services.AddScoped<IUserInventoryRepository, UserInventoryRepository>();
+builder.Services.AddScoped<IUserInventoryService, UserInvertoryService>();
 #endregion
 
 

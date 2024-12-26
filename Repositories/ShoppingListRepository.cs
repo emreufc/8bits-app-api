@@ -16,12 +16,17 @@ namespace _8bits_app_api.Repositories
             return await _context.ShoppingLists.FirstOrDefaultAsync(s => s.ShoppingListId == shoppingListId && !s.IsDeleted == false);
         }
 
-        public async Task UpdateShoppingListAsync(ShoppingList shoppingList)
+        public async Task<bool> DeleteFromShoppingListAsync(int shoppingListId)
         {
-            _context.ShoppingLists.Update(shoppingList);
+            var item = await _context.ShoppingLists.FindAsync(shoppingListId);
+            if (item == null)
+            {
+                return false;
+            }
+            _context.ShoppingLists.Remove(item);
             await _context.SaveChangesAsync();
+            return true;
         }
-
         public async Task<ShoppingList> AddToShoppingListAsync(ShoppingList shoppingList)
         {
             await _context.ShoppingLists.AddAsync(shoppingList);

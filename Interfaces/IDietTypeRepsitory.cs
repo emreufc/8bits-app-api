@@ -7,5 +7,4 @@ namespace _8bits_app_api.Interfaces
         Task<(IEnumerable<DietType> dietTypes, int totalCount)> GetPaginatedAsync(int pageNumber, int pageSize);
         Task<DietType> GetByIdAsync(int id);
     }
-
 }

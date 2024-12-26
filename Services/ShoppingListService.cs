@@ -15,15 +15,7 @@ namespace _8bits_app_api.Services
 
         public async Task<bool> DeleteFromShoppingListAsync(int shoppingListId)
         {
-            var shoppingListItem = await _shoppingListRepository.GetShoppingListByIdAsync(shoppingListId);
-            if (shoppingListItem == null)
-            {
-                return false; // Item not found
-            }
-
-            shoppingListItem.IsDeleted = true; // Soft delete by marking as deleted
-            await _shoppingListRepository.UpdateShoppingListAsync(shoppingListItem);
-            return true;
+            return await _shoppingListRepository.DeleteFromShoppingListAsync(shoppingListId);
         }
         public async Task<ShoppingList> AddToShoppingListAsync(ShoppingListRequestDto shoppingListDto)
         {
@@ -32,7 +24,7 @@ namespace _8bits_app_api.Services
                 UserId = shoppingListDto.UserId,
                 IngredientId = shoppingListDto.IngredientId,
                 QuantityTypeId = shoppingListDto.QuantityTypeId,
-                Quantity = shoppingListDto.Quantity,
+                Quantity = shoppingListDto.Quantity.ToString(),
                 IsDeleted = false // Varsayılan olarak false
             };
 
