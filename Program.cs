@@ -97,6 +97,9 @@ builder.Services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenReposito
 
 builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
 builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
+
+builder.Services.AddScoped<IFavoriteRecipeRepository, FavoriteRecipeRepository>();
+builder.Services.AddScoped<IFavoriteRecipeService, FavoriteRecipeService>();
 #endregion
 
 
