@@ -10,7 +10,7 @@ namespace _8bits_app_api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly IUserService _userService;
 
@@ -23,19 +23,19 @@ namespace _8bits_app_api.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateUser([FromBody] User updatedUser)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new
-                {
-                    code = 401,
-                    message = "Unauthorized. User ID not found in token.",
-                    data = (object)null
-                });
-            }
+            //var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            //if (userIdClaim == null)
+            //{
+            //    return Unauthorized(new
+            //    {
+            //        code = 401,
+            //        message = "Unauthorized. User ID not found in token.",
+            //        data = (object)null
+            //    });
+            //}
 
-            var userId = int.Parse(userIdClaim.Value);
-
+            //var userId = int.Parse(userIdClaim.Value);
+            var userId = GetCurrentUserId();
             var result = await _userService.UpdateUserAsync(userId, updatedUser);
             if (!result)
             {
@@ -57,19 +57,19 @@ namespace _8bits_app_api.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteUser()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new
-                {
-                    code = 401,
-                    message = "Unauthorized. User ID not found in token.",
-                    data = (object)null
-                });
-            }
+            //var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            //if (userIdClaim == null)
+            //{
+            //    return Unauthorized(new
+            //    {
+            //        code = 401,
+            //        message = "Unauthorized. User ID not found in token.",
+            //        data = (object)null
+            //    });
+            //}
 
-            var currentUserId = int.Parse(userIdClaim.Value);
-
+            //var currentUserId = int.Parse(userIdClaim.Value);
+            var currentUserId = GetCurrentUserId();
             var result = await _userService.DeleteUserAsync(currentUserId);
             if (!result)
             {
@@ -94,19 +94,19 @@ namespace _8bits_app_api.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized(new
-                {
-                    code = 401,
-                    message = "Unauthorized. User ID not found in token.",
-                    data = (object)null
-                });
-            }
+            //var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            //if (userIdClaim == null)
+            //{
+            //    return Unauthorized(new
+            //    {
+            //        code = 401,
+            //        message = "Unauthorized. User ID not found in token.",
+            //        data = (object)null
+            //    });
+            //}
 
-            var userId = int.Parse(userIdClaim.Value);
-
+            //var userId = int.Parse(userIdClaim.Value);
+            var userId = GetCurrentUserId();
             var user = await _userService.GetUserByIdAsync(userId);
 
             var userResponse = new

@@ -7,7 +7,7 @@ namespace _8bits_app_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ShoppingListController : ControllerBase
+    public class ShoppingListController : BaseController
     {
         private readonly IShoppingListService _shoppingListService;
 
@@ -61,7 +61,8 @@ namespace _8bits_app_api.Controllers
                     data = (object)null
                 });
             }
-
+            var userId = GetCurrentUserId();
+            shoppingList.UserId = userId;
             var result = await _shoppingListService.AddToShoppingListAsync(shoppingList);
 
             if (result == null)
@@ -83,9 +84,12 @@ namespace _8bits_app_api.Controllers
         }
 
         // GET: api/ShoppingList/{userId}
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetShoppingListByUserId(int userId)
+        [HttpGet("mylist")]
+        public async Task<IActionResult> GetMyShoppingList()
+
         {
+            var userId = GetCurrentUserId();
+
             if (userId <= 0)
             {
                 return BadRequest(new
