@@ -94,6 +94,15 @@ builder.Services.AddScoped<IRecipeReadingService, RecipeReadingService>();
 
 builder.Services.AddScoped<IUserRefreshTokenService, UserRefreshTokenService>();
 builder.Services.AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
+
+builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
+builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
+
+builder.Services.AddScoped<IFavoriteRecipeRepository, FavoriteRecipeRepository>();
+builder.Services.AddScoped<IFavoriteRecipeService, FavoriteRecipeService>();
+
+builder.Services.AddScoped<IUserInventoryRepository, UserInventoryRepository>();
+builder.Services.AddScoped<IUserInventoryService, UserInvertoryService>();
 #endregion
 
 
