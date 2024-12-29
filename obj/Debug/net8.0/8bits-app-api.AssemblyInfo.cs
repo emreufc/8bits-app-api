@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("8bits-app-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08c271bb28bbe3a56c03e3e443507db40c8a13b3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7cf4a0589e2b8cfca31bcbee862757e27e365c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("8bits-app-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("8bits-app-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

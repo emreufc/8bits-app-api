@@ -27,8 +27,10 @@ public class AuthService : IAuthService
         var user = new User
         {
             Name = model.Name,
+            Surname = model.Surname,
             Email = model.Email,
             DateOfBirth = dateOfBirth,
+            PhoneNumber = model.PhoneNumber,
             Role = "User"
         };
 

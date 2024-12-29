@@ -11,8 +11,6 @@ public partial class UserInventory
 
     public int? IngredientId { get; set; }
 
-    public DateOnly? ExpiryDate { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     public double? Quantity { get; set; }

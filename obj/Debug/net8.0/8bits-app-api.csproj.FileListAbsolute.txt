@@ -353,3 +353,13 @@ C:/Users/Taylan/source/repos/8bits-app-api/obj/Debug/net8.0/ref/8bits-app-api.dl
 /Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/DevOne.Security.Cryptography.BCrypt.dll
 /Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/BCrypt.Net.dll
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/publish/web.config
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/web.config
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/8bits-app-api.deps.json
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/8bits-app-api.runtimeconfig.json
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/appsettings.Development.json
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/appsettings.json
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/publish/8bits-app-api.deps.json
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/publish/8bits-app-api.runtimeconfig.json
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/publish/appsettings.Development.json
+/Users/emreufc/Desktop/ITU/8bits-app-api/bin/Debug/net8.0/publish/publish/appsettings.json

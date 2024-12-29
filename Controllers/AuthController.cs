@@ -44,10 +44,12 @@ namespace _8bits_app_api.Controllers
             var user = new User
             {
                 Name = model.Name,
+                Surname = model.Surname,
                 Email = model.Email,
                 PasswordHash = hashedPassword,
                 PasswordSalt = salt,
                 DateOfBirth = dateOfBirth,
+                PhoneNumber = model.PhoneNumber,
                 Role = "User",
                 IsDeleted = false
             };
@@ -61,19 +63,11 @@ namespace _8bits_app_api.Controllers
 
             return Ok(new
             {
-                message = "User registered and logged in successfully.",
-                data = new
-                {
-                    user = new
-                    {
-                        createdUser.UserId,
-                        createdUser.Name,
-                        createdUser.Email,
-                        createdUser.Role
-                    },
-                    token,
-                    refreshToken = refreshToken.RefreshToken
-                }
+                message = "Login successful.",
+                accessToken = token,
+                uid = createdUser.UserId,
+                expiration = DateTime.UtcNow.AddMinutes(30),
+                refreshToken = refreshToken.RefreshToken
             });
         }
 
@@ -100,7 +94,9 @@ namespace _8bits_app_api.Controllers
             return Ok(new
             {
                 message = "Login successful.",
-                token = token,
+                accessToken = token,
+                uid = user.UserId,
+                expiration = DateTime.UtcNow.AddMinutes(30),
                 refreshToken = refreshToken.RefreshToken
             });
         }

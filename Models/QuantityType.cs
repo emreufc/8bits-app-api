@@ -9,8 +9,6 @@ public partial class QuantityType
 
     public int QuantityTypeId { get; set; }
 
-    public double? Amount { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();

@@ -25,6 +25,8 @@ public partial class mydbcontext : DbContext
 
     public virtual DbSet<Ingredient> Ingredients { get; set; }
 
+    public virtual DbSet<IngredientConversion> IngredientConversions { get; set; }
+
     public virtual DbSet<QuantityType> QuantityTypes { get; set; }
 
     public virtual DbSet<Recipe> Recipes { get; set; }
@@ -151,6 +153,24 @@ public partial class mydbcontext : DbContext
                 .HasConstraintName("FK_ingredients_allergen_id");
         });
 
+        modelBuilder.Entity<IngredientConversion>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("ingredient_conversion");
+
+            entity.Property(e => e.ConversionToGrams).HasColumnName("conversion_to_grams");
+            entity.Property(e => e.ConversionToMl).HasColumnName("conversion_to_ml");
+            entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
+            entity.Property(e => e.IngredientName)
+                .HasMaxLength(70)
+                .HasColumnName("ingredient_name");
+            entity.Property(e => e.QuantityTypeDesc)
+                .HasMaxLength(70)
+                .HasColumnName("quantity_type_desc");
+            entity.Property(e => e.QuantityTypeId).HasColumnName("quantity_type_id");
+        });
+
         modelBuilder.Entity<QuantityType>(entity =>
         {
             entity.ToTable("quantity_types");
@@ -158,7 +178,6 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.QuantityTypeId)
                 .ValueGeneratedNever()
                 .HasColumnName("quantity_type_id");
-            entity.Property(e => e.Amount).HasColumnName("amount");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("is_deleted");
@@ -306,9 +325,7 @@ public partial class mydbcontext : DbContext
             entity.ToTable("users");
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.AllergyId).HasColumnName("allergy_id");
             entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
-            entity.Property(e => e.DietPreferenceId).HasColumnName("diet_preference_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -324,18 +341,19 @@ public partial class mydbcontext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("password_hash");
-            entity.Property(e => e.PasswordSalt).HasColumnName("password_salt");
+            entity.Property(e => e.PasswordSalt)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("password_salt");
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(50)
+                .HasColumnName("phone_number");
             entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasColumnName("role");
-
-            entity.HasOne(d => d.Allergy).WithMany(p => p.Users)
-                .HasForeignKey(d => d.AllergyId)
-                .HasConstraintName("FK_users_allergy_id");
-
-            entity.HasOne(d => d.DietPreference).WithMany(p => p.Users)
-                .HasForeignKey(d => d.DietPreferenceId)
-                .HasConstraintName("FK_users_diet_preference_id");
+            entity.Property(e => e.Surname)
+                .HasMaxLength(100)
+                .HasColumnName("surname");
         });
 
         modelBuilder.Entity<UserAllergy>(entity =>
@@ -367,7 +385,6 @@ public partial class mydbcontext : DbContext
             entity.ToTable("user_inventory");
 
             entity.Property(e => e.InventoryId).HasColumnName("inventory_id");
-            entity.Property(e => e.ExpiryDate).HasColumnName("expiry_date");
             entity.Property(e => e.IngredientId).HasColumnName("ingredient_id");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)

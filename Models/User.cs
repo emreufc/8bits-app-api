@@ -15,19 +15,15 @@ public partial class User
 
     public DateOnly? DateOfBirth { get; set; }
 
-    public int? AllergyId { get; set; }
-
-    public int? DietPreferenceId { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     public string? PasswordSalt { get; set; }
 
     public string? Role { get; set; }
 
-    public virtual UserAllergy? Allergy { get; set; }
+    public string? PhoneNumber { get; set; }
 
-    public virtual DietPreference? DietPreference { get; set; }
+    public string? Surname { get; set; }
 
     public virtual ICollection<DietPreference> DietPreferences { get; set; } = new List<DietPreference>();
 
