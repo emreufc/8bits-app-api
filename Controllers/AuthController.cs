@@ -79,7 +79,7 @@ namespace _8bits_app_api.Controllers
             var user = await _userService.GetUserByEmailAsync(model.Email);
             if (user == null)
             {
-                return Unauthorized(new { message = "Invalid credentials" });
+                return Unauthorized(new { message = "User not found for this email" });
             }
 
             var isValidPassword = _passwordService.ValidatePassword(user.PasswordHash, user.PasswordSalt, model.Password);

@@ -17,11 +17,6 @@ namespace _8bits_app_api.Repositories
             return await _context.UserInventories.Where(ui => ui.UserId == userId).ToListAsync();
         }
 
-        //public async Task<ShoppingList> GetShoppingListByIdAsync(int shoppingListId)
-        //{
-        //    return await _context.ShoppingLists.FirstOrDefaultAsync(s => s.ShoppingListId == shoppingListId && !s.IsDeleted == false);
-        //}
-
         public async Task<bool> UpdateInventoryAsync(UserInventory inventory)
         {
             _context.UserInventories.Update(inventory);

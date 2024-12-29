@@ -1,12 +1,11 @@
 {
   "Version": 1,
-  "Hash": "lESCVLp/xgqQBNJa2fjno0yxNOAutyP29V6wsmdy+C0=",
+  "Hash": "iqQOxJWONnyMmQ/j1uSMYoTsr28Iw1VW0gRfYZN+8Ew=",
   "Source": "8bits-app-api",
   "BasePath": "_content/8bits-app-api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": []
 }
