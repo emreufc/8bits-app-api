@@ -13,6 +13,16 @@ namespace _8bits_app_api.Services
         }
         public async Task<UserInventory> AddToInventoryAsync(ShoppingListRequestDto inventory)
         {
+            var existingInventory = await _repository.GetInventoryByUserIdAndIngredientIdAsync(inventory.UserId, inventory.IngredientId);
+
+            if (existingInventory != null)
+            {
+
+                existingInventory.Quantity += inventory.Quantity;
+                await _repository.UpdateInventoryAsync(existingInventory);
+
+                return existingInventory;
+            }
             var Userinventory = new UserInventory
             {
                 UserId = inventory.UserId,
@@ -42,7 +52,7 @@ namespace _8bits_app_api.Services
                 return false;
             }
 
-            existingUserInventory.Quantity = inventory.Quantity ?? existingUserInventory.Quantity;
+            existingUserInventory.Quantity = inventory.Quantity;
 
             // Update other properties as needed...
 

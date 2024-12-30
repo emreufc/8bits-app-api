@@ -28,8 +28,7 @@ namespace _8bits_app_api.Repositories
 
             if (favorite != null)
             {
-                favorite.IsDeleted = true;
-                _context.FavoriteRecipes.Update(favorite);
+                _context.FavoriteRecipes.Remove(favorite);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -37,12 +36,13 @@ namespace _8bits_app_api.Repositories
             return false;
         }
 
-        public async Task<IEnumerable<FavoriteRecipe>> GetFavoritesByUserIdAsync(int userId)
+        public async Task<IEnumerable<Recipe>> GetFavoritesByUserIdAsync(int userId)
         {
             return await _context.FavoriteRecipes
                 .Where(f => f.UserId == userId && !(f.IsDeleted ?? false))
-                .Include(f => f.Recipe)
+                .Select(f => f.Recipe) // Sadece ilgili tarifleri seç
                 .ToListAsync();
         }
+
     }
 }

@@ -27,6 +27,8 @@ public partial class mydbcontext : DbContext
 
     public virtual DbSet<IngredientConversion> IngredientConversions { get; set; }
 
+    public virtual DbSet<OldRecipe> OldRecipes { get; set; }
+
     public virtual DbSet<QuantityType> QuantityTypes { get; set; }
 
     public virtual DbSet<Recipe> Recipes { get; set; }
@@ -169,6 +171,17 @@ public partial class mydbcontext : DbContext
                 .HasMaxLength(70)
                 .HasColumnName("quantity_type_desc");
             entity.Property(e => e.QuantityTypeId).HasColumnName("quantity_type_id");
+        });
+
+        modelBuilder.Entity<OldRecipe>(entity =>
+        {
+            entity.HasKey(e => e.OldRecipeId).HasName("PK__old_reci__09FCF62CCBDB2BD9");
+
+            entity.ToTable("old_recipes");
+
+            entity.Property(e => e.AddedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
         });
 
         modelBuilder.Entity<QuantityType>(entity =>

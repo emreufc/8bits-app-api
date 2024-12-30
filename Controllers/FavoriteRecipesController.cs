@@ -1,5 +1,6 @@
 ﻿using _8bits_app_api.Dtos;
 using _8bits_app_api.Interfaces;
+using _8bits_app_api.Models;
 using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,6 +11,7 @@ namespace _8bits_app_api.Controllers
     [ApiController]
     public class FavoriteRecipesController : BaseController
     {
+        private readonly IRecipeReadingService _recipeservice;
         private readonly IFavoriteRecipeService _service;
 
         public FavoriteRecipesController(IFavoriteRecipeService service)
@@ -102,13 +104,22 @@ namespace _8bits_app_api.Controllers
             try
             {
                 var userId = GetCurrentUserId();
-                var favorites = await _service.GetFavoritesByUserIdAsync(userId);
+                var favoriteRecipes = await _service.GetFavoritesByUserIdAsync(userId);
 
+                if (favoriteRecipes == null || !favoriteRecipes.Any())
+                {
+                    return NotFound(new
+                    {
+                        code = 404,
+                        message = "No favorite recipes found.",
+                        data = (object)null
+                    });
+                }
                 return Ok(new
                 {
                     code = 200,
                     message = "Favorites retrieved successfully.",
-                    data = favorites
+                    data = favoriteRecipes
                 });
             }
             catch (UnauthorizedAccessException ex)
@@ -129,15 +140,6 @@ namespace _8bits_app_api.Controllers
                     data = (object)null
                 });
             }
-        }
-
-        private int GetCurrentUserId()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                throw new UnauthorizedAccessException("Unauthorized. User ID not found in token.");
-
-            return int.Parse(userIdClaim.Value);
         }
     }
 

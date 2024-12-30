@@ -7,6 +7,6 @@ namespace _8bits_app_api.Interfaces
     {
         Task<FavoriteRecipeDto> AddFavoriteAsync(FavoriteRecipeDto dto);
         Task<bool> RemoveFavoriteAsync(int userId, int recipeId);
-        Task<IEnumerable<FavoriteRecipeDto>> GetFavoritesByUserIdAsync(int userId);
+        Task<IEnumerable<Recipe>> GetFavoritesByUserIdAsync(int userId);
     }
 }

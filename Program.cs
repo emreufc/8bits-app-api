@@ -104,6 +104,12 @@ builder.Services.AddScoped<IFavoriteRecipeService, FavoriteRecipeService>();
 builder.Services.AddScoped<IUserInventoryRepository, UserInventoryRepository>();
 builder.Services.AddScoped<IUserInventoryService, UserInvertoryService>();
 
+builder.Services.AddScoped<IOldRecipesRepository, OldRecipeRepository>();
+builder.Services.AddScoped<IOldRecipesService, OldRecipeService>();
+
+builder.Services.AddScoped<IConversionRepository, ConversionRepository>();
+builder.Services.AddScoped<IConversionService, ConversionService>();
+
 builder.Services.AddScoped<IDietPreferenceRepository, DietPreferenceRepository>();
 builder.Services.AddScoped<IDietPreferenceReadingService, DietPreferenceReadingService>();
 #endregion

@@ -37,15 +37,9 @@ namespace _8bits_app_api.Services
             return await _repository.RemoveFavoriteAsync(userId, recipeId);
         }
 
-        public async Task<IEnumerable<FavoriteRecipeDto>> GetFavoritesByUserIdAsync(int userId)
+        public async Task<IEnumerable<Recipe>> GetFavoritesByUserIdAsync(int userId)
         {
-            var favorites = await _repository.GetFavoritesByUserIdAsync(userId);
-            return favorites.Select(f => new FavoriteRecipeDto
-            {
-                UserId = f.UserId ?? 0,
-                RecipeId = f.RecipeId ?? 0,
-                IsDeleted = f.IsDeleted ?? false
-            });
+            return await _repository.GetFavoritesByUserIdAsync(userId);
         }
     }
 }

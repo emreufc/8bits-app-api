@@ -1,4 +1,5 @@
-﻿using _8bits_app_api.Models;
+﻿using _8bits_app_api.Dtos;
+using _8bits_app_api.Models;
 using _8bits_app_api.Repositories;
 
 namespace _8bits_app_api.Services
@@ -19,5 +20,10 @@ namespace _8bits_app_api.Services
         {
             return await _recipeRepository.GetRecipeByIdAsync(id);
         }
+        public async Task<(IEnumerable<RecipeWithMatchDto> recipes, int totalCount)> GetAllRecipesWithMatchAsync(int userId, int pageNumber, int pageSize)
+        {
+            return await _recipeRepository.GetAllRecipesWithMatchAsync(userId, pageNumber, pageSize);
+        }
+
     }
 }

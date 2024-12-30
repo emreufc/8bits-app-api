@@ -6,14 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace _8bits_app_api.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserInventoryController : BaseController
     {
-
+        private readonly IConversionService _conversionservice;
         private readonly IUserInventoryService _userInventoryService;
 
-        public UserInventoryController(IUserInventoryService userInventoryService)
+        public UserInventoryController(IUserInventoryService userInventoryService, IConversionService conversionservice)
         {
             _userInventoryService = userInventoryService;
+            _conversionservice = conversionservice;
         }
         // GET: api/Inventory/{userId}
         [HttpGet("myInventory")]
@@ -65,7 +68,20 @@ namespace _8bits_app_api.Controllers
                 });
             }
             var userId = GetCurrentUserId();
+            
+            var conversionResult = await _conversionservice.ConvertToStandardUnitAsync(inventory.IngredientId,inventory.QuantityTypeId,inventory.Quantity);
+            if (conversionResult == null)
+            {
+                return NotFound(new
+                {
+                    code = 404,
+                    message = $"conversion found in the inventory with ID {inventory.IngredientId}.",
+                    data = (object)null
+                });
+            }
             inventory.UserId = userId;
+            inventory.QuantityTypeId = conversionResult.Unit == "ml" ? 45 : 5;
+            inventory.Quantity = conversionResult.ConvertedQuantity;
             var result = await _userInventoryService.AddToInventoryAsync(inventory);
 
             if (result == null)

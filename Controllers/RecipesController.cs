@@ -1,4 +1,5 @@
-﻿using _8bits_app_api.Models;
+﻿using _8bits_app_api.Controllers;
+using _8bits_app_api.Models;
 using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,13 +7,54 @@ namespace Recipes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RecipesController : ControllerBase
+    public class RecipesController : BaseController
     {
         private readonly IRecipeReadingService _recipeReadingService;
 
         public RecipesController(IRecipeReadingService recipeReadingService)
         {
             _recipeReadingService = recipeReadingService;
+        }
+        [HttpGet("recipes-with-match")]
+        public async Task<IActionResult> GetRecipesWithMatch([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var userId = GetCurrentUserId();
+
+            if (userId <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Invalid user ID.",
+                    data = (object)null
+                });
+            }
+
+            var (recipes, totalCount) = await _recipeReadingService.GetAllRecipesWithMatchAsync(userId, pageNumber, pageSize);
+
+            if (recipes == null || !recipes.Any())
+            {
+                return NotFound(new
+                {
+                    code = 404,
+                    message = "No recipes found.",
+                    data = (object)null
+                });
+            }
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Recipes retrieved successfully.",
+                data = recipes,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
+            });
         }
 
         // GET: api/Recipes
