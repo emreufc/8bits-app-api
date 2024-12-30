@@ -103,6 +103,9 @@ builder.Services.AddScoped<IFavoriteRecipeService, FavoriteRecipeService>();
 
 builder.Services.AddScoped<IUserInventoryRepository, UserInventoryRepository>();
 builder.Services.AddScoped<IUserInventoryService, UserInvertoryService>();
+
+builder.Services.AddScoped<IDietPreferenceRepository, DietPreferenceRepository>();
+builder.Services.AddScoped<IDietPreferenceReadingService, DietPreferenceReadingService>();
 #endregion
 
 builder.Services.AddCors(options =>
