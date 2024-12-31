@@ -1,6 +1,7 @@
 ﻿using _8bits_app_api.Dtos;
 using _8bits_app_api.Interfaces;
 using _8bits_app_api.Models;
+using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _8bits_app_api.Controllers
@@ -10,10 +11,11 @@ namespace _8bits_app_api.Controllers
     public class ShoppingListController : BaseController
     {
         private readonly IShoppingListService _shoppingListService;
-
-        public ShoppingListController(IShoppingListService shoppingListService)
+        private readonly IConversionService _conversionservice;
+        public ShoppingListController(IShoppingListService shoppingListService, IConversionService conversionservice)
         {
             _shoppingListService = shoppingListService;
+            _conversionservice = conversionservice;
         }
         [HttpDelete("{shoppingListId}")]
         public async Task<IActionResult> DeleteFromShoppingList(int shoppingListId)
@@ -61,8 +63,32 @@ namespace _8bits_app_api.Controllers
                     data = (object)null
                 });
             }
+
             var userId = GetCurrentUserId();
             shoppingList.UserId = userId;
+
+            // Conversion işlemi
+            var conversionResult = await _conversionservice.ConvertToStandardUnitAsync(
+                shoppingList.IngredientId,
+                shoppingList.QuantityTypeId,
+                shoppingList.Quantity
+            );
+
+            if (conversionResult == null)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = $"Conversion failed for ingredient ID {shoppingList.IngredientId}.",
+                    data = (object)null
+                });
+            }
+
+            // Conversion sonrası değerleri güncelle
+            shoppingList.QuantityTypeId = conversionResult.Unit == "ml" ? 45 : 5;
+            shoppingList.Quantity = conversionResult.ConvertedQuantity;
+
+            // Shopping list'e ekleme işlemi
             var result = await _shoppingListService.AddToShoppingListAsync(shoppingList);
 
             if (result == null)
