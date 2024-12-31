@@ -101,9 +101,12 @@ namespace _8bits_app_api.Controllers
             {
                 userId = user.UserId,
                 name = user.Name,
+                surname=user.Surname,
                 email = user.Email,
                 dateOfBirth = user.DateOfBirth,
-                role = user.Role
+                role = user.Role,
+                gender= user.Gender,
+                phoneNumber= user.PhoneNumber
             };
             if (user == null)
             {
