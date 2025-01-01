@@ -1,4 +1,5 @@
-﻿using _8bits_app_api.Interfaces;
+﻿using _8bits_app_api.Dtos;
+using _8bits_app_api.Interfaces;
 using _8bits_app_api.Models;
 using _8bits_app_api.Repositories;
 
@@ -13,20 +14,21 @@ namespace _8bits_app_api.Services
             _ingredientRepository = ingredientRepository;
         }
 
-        public async Task<(IEnumerable<Ingredient> ingredients, int totalCount)> GetIngredientsPaginatedAsync(int pageNumber, int pageSize)
+        public async Task<(IEnumerable<IngredientWithQuantitiesDto> ingredients, int totalCount)> GetIngredientsPaginatedAsync(int pageNumber, int pageSize)
         {
             return await _ingredientRepository.GetPaginatedAsync(pageNumber, pageSize);
         }
 
-        public async Task<Ingredient> GetIngredientByIdAsync(int id)
+        public async Task<IngredientWithQuantitiesDto> GetIngredientByIdAsync(int id)
         {
             return await _ingredientRepository.GetByIdAsync(id);
         }
 
-        public async Task<(IEnumerable<Ingredient> ingredients, int totalCount)> GetIngredientByCategoryAsync(List<string> selectedCategories, int pageNumber, int pageSize)
+        public async Task<(IEnumerable<IngredientWithQuantitiesDto> ingredients, int totalCount)> GetIngredientByCategoryAsync(List<string> selectedCategories, int pageNumber, int pageSize)
         {
             return await _ingredientRepository.GetIngredientByCategoryAsync(selectedCategories, pageNumber, pageSize) ;
         }
+
     }
 
 }
