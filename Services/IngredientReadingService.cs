@@ -22,6 +22,11 @@ namespace _8bits_app_api.Services
         {
             return await _ingredientRepository.GetByIdAsync(id);
         }
+
+        public async Task<(IEnumerable<Ingredient> ingredients, int totalCount)> GetIngredientByCategoryAsync(List<string> selectedCategories, int pageNumber, int pageSize)
+        {
+            return await _ingredientRepository.GetIngredientByCategoryAsync(selectedCategories, pageNumber, pageSize) ;
+        }
     }
 
 }
