@@ -77,7 +77,6 @@ namespace _8_bits.Controllers
                 data = recipeIngredient
             });
         }
-
         // GET: api/RecipeIngredient/recipe/{recipeId}
         [HttpGet("recipe/{recipeId}")]
         public async Task<IActionResult> GetRecipeIngredientsByRecipeId(int recipeId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -93,6 +92,7 @@ namespace _8_bits.Controllers
             }
 
             var (recipeIngredients, totalCount) = await _recipeIngredientService.GetRecipeIngredientsByRecipeIdPaginatedAsync(recipeId, pageNumber, pageSize);
+
             if (recipeIngredients == null || !recipeIngredients.Any())
             {
                 return NotFound(new
@@ -103,11 +103,24 @@ namespace _8_bits.Controllers
                 });
             }
 
+            // IngredientName bilgisi ile birlikte dön
+            var data = recipeIngredients.Select(ri => new
+            {
+                ri.RecipeIngredientId,
+                ri.RecipeId,
+                ri.IngredientId,
+                IngredientName = ri.Ingredient.IngredientName, // Ingredient ilişkisini kontrol et
+                Unit =ri.QuantityType.QuantityTypeDesc,
+                ri.Quantity,
+                ri.QuantityTypeId,
+                ri.IsDeleted
+            });
+
             return Ok(new
             {
                 code = 200,
                 message = $"Successfully retrieved {recipeIngredients.Count()} ingredients for Recipe ID {recipeId}.",
-                data = recipeIngredients,
+                data = data,
                 pagination = new
                 {
                     currentPage = pageNumber,
@@ -117,5 +130,6 @@ namespace _8_bits.Controllers
                 }
             });
         }
+
     }
 }

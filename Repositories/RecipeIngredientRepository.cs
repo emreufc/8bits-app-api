@@ -32,6 +32,8 @@ namespace _8bits_app_api.Repositories
             var totalCount = await _context.RecipeIngredients.CountAsync(ri => ri.RecipeId == recipeId && ri.IsDeleted == false);
             var recipeIngredients = await _context.RecipeIngredients
                 .Where(ri => ri.RecipeId == recipeId && ri.IsDeleted == false)
+                .Include(ri => ri.Ingredient)
+                .Include(ri => ri.QuantityType)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
