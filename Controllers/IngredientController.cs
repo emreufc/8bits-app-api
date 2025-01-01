@@ -77,5 +77,31 @@ namespace Ingredients.Controllers
                 data = ingredient
             });
         }
+
+        [HttpGet("by-category")]
+        public async Task<IActionResult> GetByCategory(
+        [FromQuery] List<string> categories,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+        {
+            if (categories == null || categories.Count == 0)
+                return BadRequest("Categories must be provided.");
+
+            try
+            {
+                var result = await _ingredientReadingService.GetIngredientByCategoryAsync(categories, pageNumber, pageSize);
+                return Ok(new
+                {
+                    Data = result.ingredients,
+                    TotalCount = result.totalCount,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

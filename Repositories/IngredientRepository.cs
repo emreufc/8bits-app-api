@@ -28,6 +28,23 @@ namespace _8bits_app_api.Repositories
         {
             return await _context.Ingredients.FindAsync(id);
         }
+
+        public async Task<(IEnumerable<Ingredient> ingredients, int totalCount)> GetIngredientByCategoryAsync(List<string> selectedCategories, int pageNumber, int pageSize)
+        {
+            // Base query for filtering by categories
+            var query = _context.Ingredients.Where(ingredient => ingredient.IsDeleted ==false && selectedCategories.Contains(ingredient.IngredientCategory));
+
+            // Get the total count before pagination
+            var totalCount = await query.CountAsync();
+
+            // Apply pagination
+            var ingredients = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (ingredients, totalCount);
+        }
     }
 
 }
