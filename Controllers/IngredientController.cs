@@ -51,7 +51,8 @@ namespace Ingredients.Controllers
                     pageSize,
                     totalRecords = totalCount,
                     totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
-                }
+                },
+                
             });
         }
 
