@@ -46,5 +46,6 @@ namespace _8bits_app_api.Services
         {
             return await _repository.IsUserFavouriteAsync(userId, recipeId);
         }
+      
     }
 }

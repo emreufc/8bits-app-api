@@ -24,5 +24,24 @@ namespace _8bits_app_api.Repositories
                                  .OrderByDescending(or => or.AddedDate)
                                  .ToListAsync();
         }
+        public async Task<bool> IsUserOldRecipeAsync(int userId, int recipeId)
+        {
+            return await _context.OldRecipes
+                .AnyAsync(or => or.UserId == userId && or.RecipeId == recipeId && !(or.IsDeleted));
+        }
+        public async Task<bool> DeleteOldRecipeAsync(int recipeId, int userId)
+        {
+            var oldRecipe = await _context.OldRecipes
+                .FirstOrDefaultAsync(or => or.RecipeId == recipeId && or.UserId == userId);
+
+            if (oldRecipe != null)
+            {
+                _context.OldRecipes.Remove(oldRecipe);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

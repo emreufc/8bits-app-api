@@ -188,6 +188,7 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.AddedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
         });
 
         modelBuilder.Entity<QuantityType>(entity =>

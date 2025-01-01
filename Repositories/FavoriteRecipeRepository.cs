@@ -49,6 +49,6 @@ namespace _8bits_app_api.Repositories
             return await _context.FavoriteRecipes
                 .AnyAsync(fr => fr.UserId == userId && fr.RecipeId == recipeId && !(fr.IsDeleted ?? false));
         }
-
+       
     }
 }

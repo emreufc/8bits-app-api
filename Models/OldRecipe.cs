@@ -12,4 +12,6 @@ public partial class OldRecipe
     public int UserId { get; set; }
 
     public DateTime? AddedDate { get; set; }
+
+    public bool IsDeleted { get; set; }
 }

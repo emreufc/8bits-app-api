@@ -10,12 +10,14 @@ namespace Recipes.Controllers
     [ApiController]
     public class RecipesController : BaseController
     {
+        private readonly IOldRecipesService _oldRecipeService;
         private readonly IRecipeReadingService _recipeReadingService;
         private readonly IFavoriteRecipeService _favouriteRecipeService;
-        public RecipesController(IRecipeReadingService recipeReadingService, IFavoriteRecipeService favouriteRecipeService)
+        public RecipesController(IRecipeReadingService recipeReadingService, IFavoriteRecipeService favouriteRecipeService, IOldRecipesService oldRecipeService)
         {
             _recipeReadingService = recipeReadingService;
             _favouriteRecipeService = favouriteRecipeService;
+            _oldRecipeService = oldRecipeService;
         }
         [HttpGet("recipes-with-match")]
         public async Task<IActionResult> GetRecipesWithMatch([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -117,12 +119,14 @@ namespace Recipes.Controllers
 
             var userId = GetCurrentUserId();
             var isFavourited =  await _favouriteRecipeService.IsUserFavouriteAsync(userId, id);
+            var isOldRecipe = await _oldRecipeService.IsUserOldRecipeAsync(userId, id);
             return Ok(new
             {
                 code = 200,
                 message = $"Recipe with ID {id} retrieved successfully.",
                 data = recipe,
-                isFavourited = isFavourited
+                isFavourited = isFavourited,
+                isOldRecipe = isOldRecipe
             });
         }
         
