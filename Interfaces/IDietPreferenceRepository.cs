@@ -5,6 +5,8 @@ namespace _8bits_app_api.Interfaces
     public interface IDietPreferenceRepository
     {
         Task<(IEnumerable<DietPreference> dietPreferences, int totalCount)> GetDietPreferencesPaginatedAsync(int pageNumber, int pageSize);
+        Task<(IEnumerable<DietPreference> dietPreferences, int totalCount)> GetDietPreferencesByUserAsync(int pageNumber, int pageSize, int userId);
+
         Task<DietPreference> GetByIdAsync(int id);
         Task<DietPreference> AddToDietPreferenceAsync(DietPreference dietPreference);
         Task<DietPreference> GetDietPreferenceByIdAsync(int dietPreferenceID);

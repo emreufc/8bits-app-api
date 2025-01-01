@@ -23,6 +23,17 @@ namespace _8bits_app_api.Repositories
 
             return (dietPreferences, totalCount);
         }
+        
+        public async Task<(IEnumerable<DietPreference> dietPreferences, int totalCount)> GetDietPreferencesByUserAsync(int pageNumber, int pageSize, int userId)
+        {
+            var totalCount = await _context.DietPreferences.Where(p => p.IsDeleted == false && p.UserId == userId).CountAsync();
+            var dietPreferences = await _context.DietPreferences.Where(p => p.IsDeleted == false)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (dietPreferences, totalCount);
+        }
 
         public async Task<DietPreference> GetByIdAsync(int id)
         {
