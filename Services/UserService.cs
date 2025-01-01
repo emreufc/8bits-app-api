@@ -39,6 +39,7 @@ public class UserService : IUserService
         existingUser.Name = updatedUser.Name ?? existingUser.Name;
         existingUser.Email = updatedUser.Email ?? existingUser.Email;
         existingUser.Role = updatedUser.Role ?? existingUser.Role;
+        existingUser.PhoneNumber = updatedUser.PhoneNumber ?? existingUser.PhoneNumber;
         // Update other properties as needed...
 
         return await _userRepository.UpdateUserAsync(existingUser);
