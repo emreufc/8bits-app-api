@@ -40,8 +40,14 @@ namespace _8bits_app_api.Repositories
         {
             return await _context.FavoriteRecipes
                 .Where(f => f.UserId == userId && !(f.IsDeleted ?? false))
-                .Select(f => f.Recipe) // Sadece ilgili tarifleri seç
+                .Select(f => f.Recipe)
                 .ToListAsync();
+        }
+        
+        public async Task<bool> IsUserFavouriteAsync(int userId, int recipeId)
+        {
+            return await _context.FavoriteRecipes
+                .AnyAsync(fr => fr.UserId == userId && fr.RecipeId == recipeId && !(fr.IsDeleted ?? false));
         }
 
     }
