@@ -94,8 +94,8 @@ namespace _8_bits.Controllers
                 }
             });
         }
+        
         [HttpGet("getByCurrentUser")]
-        [HttpGet]
         public async Task<IActionResult> GetDietPreferencesByUser([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             if (pageNumber <= 0 || pageSize <= 0)
