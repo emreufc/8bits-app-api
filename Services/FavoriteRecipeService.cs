@@ -41,5 +41,10 @@ namespace _8bits_app_api.Services
         {
             return await _repository.GetFavoritesByUserIdAsync(userId);
         }
+
+        public async Task<bool> IsUserFavouriteAsync(int userId, int recipeId)
+        {
+            return await _repository.IsUserFavouriteAsync(userId, recipeId);
+        }
     }
 }

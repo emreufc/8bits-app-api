@@ -1,4 +1,5 @@
 ﻿using _8bits_app_api.Controllers;
+using _8bits_app_api.Interfaces;
 using _8bits_app_api.Models;
 using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,11 @@ namespace Recipes.Controllers
     public class RecipesController : BaseController
     {
         private readonly IRecipeReadingService _recipeReadingService;
-
-        public RecipesController(IRecipeReadingService recipeReadingService)
+        private readonly IFavoriteRecipeService _favouriteRecipeService;
+        public RecipesController(IRecipeReadingService recipeReadingService, IFavoriteRecipeService favouriteRecipeService)
         {
             _recipeReadingService = recipeReadingService;
+            _favouriteRecipeService = favouriteRecipeService;
         }
         [HttpGet("recipes-with-match")]
         public async Task<IActionResult> GetRecipesWithMatch([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -102,6 +104,7 @@ namespace Recipes.Controllers
         public async Task<IActionResult> GetRecipe(int id)
         {
             var recipe = await _recipeReadingService.GetRecipeByIdAsync(id);
+
             if (recipe == null)
             {
                 return NotFound(new
@@ -112,13 +115,17 @@ namespace Recipes.Controllers
                 });
             }
 
+            var userId = GetCurrentUserId();
+            var isFavourited =  await _favouriteRecipeService.IsUserFavouriteAsync(userId, id);
             return Ok(new
             {
                 code = 200,
                 message = $"Recipe with ID {id} retrieved successfully.",
-                data = recipe
+                data = recipe,
+                isFavourited = isFavourited
             });
         }
+        
         [HttpGet("filtered")]
         public async Task<IActionResult> GetFilteredRecipes([FromQuery] List<string> categories, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
