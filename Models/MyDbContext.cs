@@ -33,6 +33,8 @@ public partial class mydbcontext : DbContext
 
     public virtual DbSet<Recipe> Recipes { get; set; }
 
+    public virtual DbSet<RecipeImage> RecipeImages { get; set; }
+
     public virtual DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
     public virtual DbSet<RecipeStep> RecipeSteps { get; set; }
@@ -143,6 +145,10 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.IngImgUrl)
                 .HasMaxLength(250)
                 .HasColumnName("ing_img_url");
+            entity.Property(e => e.IngredientCategory)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("ingredient_category");
             entity.Property(e => e.IngredientName)
                 .HasMaxLength(70)
                 .HasColumnName("ingredient_name");
@@ -206,6 +212,7 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.RecipeId)
                 .ValueGeneratedNever()
                 .HasColumnName("recipe_id");
+            entity.Property(e => e.Aksam).HasColumnName("aksam");
             entity.Property(e => e.Carbohydrate).HasColumnName("carbohydrate");
             entity.Property(e => e.CookingTime).HasColumnName("cooking_time");
             entity.Property(e => e.DairyFree)
@@ -217,12 +224,14 @@ public partial class mydbcontext : DbContext
                 .HasDefaultValue(false)
                 .HasColumnName("Gluten_Free");
             entity.Property(e => e.GramPerServing).HasColumnName("gram_per_serving");
+            entity.Property(e => e.Icecek).HasColumnName("icecek");
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(250)
                 .HasColumnName("image_url");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("is_deleted");
+            entity.Property(e => e.Kahvalti).HasColumnName("kahvalti");
             entity.Property(e => e.KcalPerServing).HasColumnName("kcal_per_serving");
             entity.Property(e => e.Keto).HasDefaultValue(false);
             entity.Property(e => e.LowCarb)
@@ -230,6 +239,7 @@ public partial class mydbcontext : DbContext
                 .HasColumnName("Low_Carb");
             entity.Property(e => e.Mediterranean).HasDefaultValue(false);
             entity.Property(e => e.Normal).HasDefaultValue(false);
+            entity.Property(e => e.Oglen).HasColumnName("oglen");
             entity.Property(e => e.Paleo).HasDefaultValue(false);
             entity.Property(e => e.PersonCount).HasColumnName("person_count");
             entity.Property(e => e.Pescatarian).HasDefaultValue(false);
@@ -239,10 +249,18 @@ public partial class mydbcontext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("recipe_name");
             entity.Property(e => e.RecipeRate).HasColumnName("recipe_rate");
+            entity.Property(e => e.Tatli).HasColumnName("tatli");
             entity.Property(e => e.Vegan)
                 .HasDefaultValue(false)
                 .HasColumnName("vegan");
             entity.Property(e => e.Vegetarian).HasDefaultValue(false);
+        });
+
+        modelBuilder.Entity<RecipeImage>(entity =>
+        {
+            entity.HasKey(e => e.RecipeImageId).HasName("PK__recipe_i__23E65C237E8F3E8E");
+
+            entity.ToTable("recipe_images");
         });
 
         modelBuilder.Entity<RecipeIngredient>(entity =>
@@ -343,6 +361,10 @@ public partial class mydbcontext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("email");
+            entity.Property(e => e.Gender)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("gender");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("is_deleted");

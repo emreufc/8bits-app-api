@@ -24,6 +24,10 @@ namespace _8bits_app_api.Services
         {
             return await _recipeRepository.GetAllRecipesWithMatchAsync(userId, pageNumber, pageSize);
         }
+        public async Task<(IEnumerable<Recipe> recipes, int totalCount)> GetFilteredRecipes(int userId, List<string> selectedCategories, int pageNumber, int pageSize)
+        {
+            return await _recipeRepository.GetFilteredRecipes(userId, selectedCategories, pageNumber, pageSize);
+        }
 
     }
 }

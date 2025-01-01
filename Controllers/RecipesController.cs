@@ -119,5 +119,19 @@ namespace Recipes.Controllers
                 data = recipe
             });
         }
+        [HttpGet("filtered")]
+        public async Task<IActionResult> GetFilteredRecipes([FromQuery] List<string> categories, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var userId = GetCurrentUserId();
+            try
+            {
+                var (recipes, totalCount) = await _recipeReadingService.GetFilteredRecipes(userId, categories, pageNumber, pageSize);
+                return Ok(new { recipes, totalCount });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
     }
 }
