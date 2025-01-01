@@ -1,6 +1,7 @@
 ﻿using _8bits_app_api.Dtos;
 using _8bits_app_api.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace _8bits_app_api.Repositories
 {
@@ -66,7 +67,64 @@ namespace _8bits_app_api.Repositories
 
             return (recipeMatchDtos, totalCount);
         }
+        public async Task<(IEnumerable<Recipe> recipes, int totalCount)> GetFilteredRecipes(int userId, List<string> selectedCategories, int pageNumber, int pageSize)
+        {
+            var userDietPreferences = _context.DietPreferences
+                .Where(dp => dp.UserId == userId && dp.IsDeleted == false)
+                .Select(dp => dp.DietTypeId)
+                .ToList();
 
+            // Get the corresponding column names for the user's diet preferences
+            var dietTypeColumns = _context.DietTypes
+                .Where(dt => userDietPreferences.Contains(dt.DietTypeId))
+                .Select(dt => dt.DietTypeName)
+                .ToList();
+
+            string dietFilter = string.Empty;
+            if (dietTypeColumns.Any())
+            {
+                var dietConditions = dietTypeColumns.Select(column => $"[{column}] = 1").ToList();
+                dietFilter = string.Join(" AND ", dietConditions);
+            }
+
+            string categoryFilter = string.Empty;
+            if (selectedCategories != null && selectedCategories.Any())
+            {
+                var categoryConditions = selectedCategories.Select(category => $"[{category}] = 1").ToList();
+                categoryFilter = string.Join(" AND ", categoryConditions);
+            }
+
+            // Combine diet and category filters
+            string whereClause = string.Empty;
+            if (!string.IsNullOrEmpty(dietFilter) && !string.IsNullOrEmpty(categoryFilter))
+            {
+                whereClause = $"{dietFilter} AND {categoryFilter}";
+            }
+            else if (!string.IsNullOrEmpty(dietFilter))
+            {
+                whereClause = dietFilter;
+            }
+            else if (!string.IsNullOrEmpty(categoryFilter))
+            {
+                whereClause = categoryFilter;
+            }
+
+            string query = $"SELECT * FROM Recipes";
+            if (!string.IsNullOrEmpty(whereClause))
+            {
+                query += $" WHERE {whereClause}";
+            }
+
+            // Execute raw SQL query with pagination
+            var totalCount = await _context.Recipes.FromSqlRaw(query).CountAsync();
+            var pagedRecipes = await _context.Recipes
+                .FromSqlRaw(query)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (pagedRecipes, totalCount);
+        }
 
     }
 }
