@@ -94,6 +94,46 @@ namespace _8_bits.Controllers
                 }
             });
         }
+        [HttpGet("getByCurrentUser")]
+        [HttpGet]
+        public async Task<IActionResult> GetDietPreferencesByUser([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
+
+            int userId = this.GetCurrentUserId();
+            var (dietPreferences, totalCount) = await _dietPreferenceReadingService.GetDietPreferencesByUserAsync(pageNumber, pageSize, userId);
+            if (dietPreferences == null || !dietPreferences.Any())
+            {
+                return NotFound(new
+                {
+                    code = 404,
+                    message = "No diet preferences found in the database. Please ensure that diet preferences have been added before querying.",
+                    data = (object)null
+                });
+            }
+
+            return Ok(new
+            {
+                code = 200,
+                message = $"Successfully retrieved {dietPreferences.Count()} diet preferences from the database.",
+                data = dietPreferences,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
+            });
+        }
 
         // GET: api/DietPreference/5
         [HttpGet("{id}")]

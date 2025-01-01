@@ -18,6 +18,11 @@ namespace _8bits_app_api.Services
         {
             return await _dietPreferenceRepository.GetDietPreferencesPaginatedAsync(pageNumber, pageSize);
         }
+        
+        public async Task<(IEnumerable<DietPreference> dietPreferences, int totalCount)> GetDietPreferencesByUserAsync(int pageNumber, int pageSize, int userId)
+        {
+            return await _dietPreferenceRepository.GetDietPreferencesByUserAsync(pageNumber, pageSize, userId);
+        }
 
         public async Task<DietPreference> GetDietPreferenceByIdAsync(int id)
         {

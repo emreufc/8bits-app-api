@@ -15,6 +15,8 @@ public partial class Ingredient
 
     public bool? IsDeleted { get; set; }
 
+    public string? IngredientCategory { get; set; }
+
     public virtual Allergen? Allergen { get; set; }
 
     public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();

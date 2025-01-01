@@ -53,6 +53,16 @@ public partial class Recipe
 
     public bool? IsDeleted { get; set; }
 
+    public bool? Kahvalti { get; set; }
+
+    public bool? Oglen { get; set; }
+
+    public bool? Aksam { get; set; }
+
+    public bool? Tatli { get; set; }
+
+    public bool? Icecek { get; set; }
+
     public virtual ICollection<FavoriteRecipe> FavoriteRecipes { get; set; } = new List<FavoriteRecipe>();
 
     public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();

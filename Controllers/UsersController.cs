@@ -45,18 +45,6 @@ namespace _8bits_app_api.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteUser()
         {
-            //var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            //if (userIdClaim == null)
-            //{
-            //    return Unauthorized(new
-            //    {
-            //        code = 401,
-            //        message = "Unauthorized. User ID not found in token.",
-            //        data = (object)null
-            //    });
-            //}
-
-            //var currentUserId = int.Parse(userIdClaim.Value);
             var currentUserId = GetCurrentUserId();
             var result = await _userService.DeleteUserAsync(currentUserId);
             if (!result)
@@ -82,18 +70,6 @@ namespace _8bits_app_api.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            //var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            //if (userIdClaim == null)
-            //{
-            //    return Unauthorized(new
-            //    {
-            //        code = 401,
-            //        message = "Unauthorized. User ID not found in token.",
-            //        data = (object)null
-            //    });
-            //}
-
-            //var userId = int.Parse(userIdClaim.Value);
             var userId = GetCurrentUserId();
             var user = await _userService.GetUserByIdAsync(userId);
 
@@ -101,7 +77,7 @@ namespace _8bits_app_api.Controllers
             {
                 userId = user.UserId,
                 name = user.Name,
-                surname=user.Surname,
+                surname= user.Surname,
                 email = user.Email,
                 dateOfBirth = user.DateOfBirth,
                 role = user.Role,
