@@ -25,7 +25,7 @@ public partial class User
 
     public string? Surname { get; set; }
 
-    public byte Gender { get; set; }
+    public string? Gender { get; set; }
 
     public virtual ICollection<DietPreference> DietPreferences { get; set; } = new List<DietPreference>();
 

@@ -8,6 +8,6 @@ public class RegisterModel
     public string Password { get; set; }
     public DateTime DateOfBirth { get; set; }
     public string PhoneNumber { get; set; }
-    public byte Gender { get; set; }
+    public string Gender { get; set; }
     
 }
