@@ -31,7 +31,7 @@ namespace _8bits_app_api.Services
             return await _shoppingListRepository.AddToShoppingListAsync(shoppingList);
         }
 
-        public async Task<IEnumerable<ShoppingList>> GetShoppingListByUserIdAsync(int userId)
+        public async Task<IEnumerable<ShoppingListResponseDto>> GetShoppingListByUserIdAsync(int userId)
         {
             return await _shoppingListRepository.GetShoppingListByUserIdAsync(userId);
         }

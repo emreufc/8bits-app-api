@@ -1,4 +1,5 @@
-﻿using _8bits_app_api.Interfaces;
+﻿using _8bits_app_api.Dtos;
+using _8bits_app_api.Interfaces;
 using _8bits_app_api.Models;
 using Microsoft.EntityFrameworkCore;
 namespace _8bits_app_api.Repositories
@@ -34,11 +35,22 @@ namespace _8bits_app_api.Repositories
             return shoppingList;
         }
 
-        public async Task<IEnumerable<ShoppingList>> GetShoppingListByUserIdAsync(int userId)
+        public async Task<IEnumerable<ShoppingListResponseDto>> GetShoppingListByUserIdAsync(int userId)
         {
             return await _context.ShoppingLists
-                                 .Where(s => s.UserId == userId && !(s.IsDeleted ?? false))
-                                 .ToListAsync();
+                .Where(s => s.UserId == userId && !(s.IsDeleted ?? false)) // Kullanıcıya ait ve silinmemiş veriler
+                .Select(s => new ShoppingListResponseDto
+                {
+                    ShoppingListId = s.ShoppingListId,
+                    UserId = s.UserId,
+                    IngredientId = s.IngredientId,
+                    QuantityTypeId = s.QuantityTypeId,
+                    Quantity = s.Quantity,
+                    IngredientName = s.Ingredient != null ? s.Ingredient.IngredientName : null,
+                    IngImgUrl = s.Ingredient != null ? s.Ingredient.IngImgUrl : null,
+                    QuantityTypeDesc = s.QuantityType != null ? s.QuantityType.QuantityTypeDesc : null
+                })
+                .ToListAsync();
         }
     }
 

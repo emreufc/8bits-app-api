@@ -137,7 +137,7 @@ namespace _8bits_app_api.Controllers
                     data = (object)null
                 });
             }
-
+            
             return Ok(new
             {
                 code = 200,

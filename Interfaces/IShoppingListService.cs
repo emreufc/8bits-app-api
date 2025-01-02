@@ -8,6 +8,6 @@ namespace _8bits_app_api.Interfaces
         Task<bool> DeleteFromShoppingListAsync(int shoppingListId);
 
         Task<ShoppingList> AddToShoppingListAsync(ShoppingListRequestDto shoppingList);
-        Task<IEnumerable<ShoppingList>> GetShoppingListByUserIdAsync(int userId);
+        Task<IEnumerable<ShoppingListResponseDto>> GetShoppingListByUserIdAsync(int userId);
     }
 }
