@@ -14,7 +14,11 @@ namespace _8bits_app_api.Repositories
         }
         public async Task<IEnumerable<UserInventory>> GetInventoryByUserIdAsync(int userId)
         {
-            return await _context.UserInventories.Where(ui => ui.UserId == userId).ToListAsync();
+            return await _context.UserInventories
+               .Include(ui => ui.QuantityType)
+               .Include(ui => ui.Ingredient)
+               .Where(ui => ui.UserId == userId)
+               .ToListAsync();
         }
 
         public async Task<bool> UpdateInventoryAsync(UserInventory inventory)
