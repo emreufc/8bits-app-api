@@ -135,29 +135,52 @@ namespace _8bits_app_api.Controllers
                 data = (object)null
             });
         }
-
-        // PUT: api/Users/update
         [HttpPut("update")]
         public async Task<IActionResult> UpdateUser([FromBody] ShoppingListRequestDto inventory)
         {
-            var userId = GetCurrentUserId();
-            var result = await _userInventoryService.UpdateInventoryAsync(userId, inventory);
-            if (!result)
+            if (inventory == null)
             {
                 return BadRequest(new
                 {
                     code = 400,
-                    message = "Failed to update user. Please check your input and try again.",
+                    message = "Inventory data is required.",
                     data = (object)null
                 });
             }
 
-            return Ok(new
+            var userId = GetCurrentUserId();
+
+            try
             {
-                code = 200,
-                message = $"User with ID {userId} updated successfully.",
-                data = inventory
-            });
+                var result = await _userInventoryService.UpdateInventoryAsync(userId, inventory);
+
+                if (!result)
+                {
+                    return NotFound(new
+                    {
+                        code = 404,
+                        message = "The inventory item could not be updated. It may not exist.",
+                        data = (object)null
+                    });
+                }
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = $"Inventory updated successfully for user ID {userId}.",
+                    data = inventory
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = ex.Message,
+                    data = (object)null
+                });
+            }
         }
+
     }
 }
