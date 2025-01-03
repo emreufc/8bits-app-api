@@ -12,11 +12,13 @@ namespace _8bits_app_api.Controllers
     {
         private readonly IConversionService _conversionservice;
         private readonly IUserInventoryService _userInventoryService;
+        private readonly IShoppingListService _shoppingListService;
 
-        public UserInventoryController(IUserInventoryService userInventoryService, IConversionService conversionservice)
+        public UserInventoryController(IUserInventoryService userInventoryService, IConversionService conversionservice, IShoppingListService shoppingListService)
         {
             _userInventoryService = userInventoryService;
             _conversionservice = conversionservice;
+            _shoppingListService = shoppingListService;
         }
         // GET: api/Inventory/{userId}
         [HttpGet("myInventory")]
@@ -172,6 +174,61 @@ namespace _8bits_app_api.Controllers
                     data = (object)null
                 });
             }
+        }
+        [HttpPost("shoppinglist-to-inventory")]
+        public async Task<IActionResult> MoveItemToInventory([FromBody] ShoppingListRequestDto request)
+        {
+            var userId = GetCurrentUserId();
+
+            if (userId <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Invalid user ID.",
+                    data = (object)null
+                });
+            }
+
+            if (request == null || request.IngredientId <= 0 || request.Quantity <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Invalid item data. Please provide valid ingredientId, quantityTypeId, and quantity.",
+                    data = (object)null
+                });
+            }
+
+            // Alışveriş listesindeki ürünü kontrol et
+            var shoppingListItem = await _shoppingListService.GetShoppingListItemByIdAndIngredientIdAsync(userId, request.IngredientId);
+
+            if (shoppingListItem == null)
+            {
+                return NotFound(new
+                {
+                    code = 404,
+                    message = "Item not found in the shopping list.",
+                    data = (object)null
+                });
+            }
+            var inventoryItem = await _userInventoryService.AddOrUpdateInventoryItemAsync(new ShoppingListRequestDto
+            {
+                UserId = userId,
+                IngredientId = request.IngredientId,
+                Quantity = request.Quantity,
+                QuantityTypeId = request.QuantityTypeId
+            });
+
+            // Alışveriş listesinden sil
+            await _shoppingListService.DeleteFromShoppingListAsync(shoppingListItem.ShoppingListId);
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Item successfully moved to inventory and removed from shopping list.",
+                data =  inventoryItem
+            });
         }
 
     }

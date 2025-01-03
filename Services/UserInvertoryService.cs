@@ -36,7 +36,31 @@ namespace _8bits_app_api.Services
 
             return await _repository.AddToInventoryAsync(Userinventory);
         }
+        public async Task<UserInventory> AddOrUpdateInventoryItemAsync(ShoppingListRequestDto inventoryItemDto)
+        {
+            // Mevcut öğeyi kontrol et
+            var existingInventoryItem = await _repository.GetInventoryByUserIdAndIngredientIdAsync(inventoryItemDto.UserId, inventoryItemDto.IngredientId);
 
+            if (existingInventoryItem != null)
+            {
+                // Mevcut ürünün miktarını artır
+                existingInventoryItem.Quantity += inventoryItemDto.Quantity;
+                await _repository.UpdateInventoryAsync(existingInventoryItem);
+                return existingInventoryItem;
+            }
+
+            // Yeni bir ürün oluştur
+            var newInventoryItem = new UserInventory
+            {
+                UserId = inventoryItemDto.UserId,
+                IngredientId = inventoryItemDto.IngredientId,
+                Quantity = inventoryItemDto.Quantity,
+                QuantityTypeId = inventoryItemDto.QuantityTypeId
+            };
+
+            await _repository.AddToInventoryAsync(newInventoryItem);
+            return newInventoryItem;
+        }
         public async Task<IEnumerable<InventoryDto>> GetInventoryByUserIdAsync(int userId)
         {
             var inventories = await _repository.GetInventoryByUserIdAsync(userId);

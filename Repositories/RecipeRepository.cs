@@ -49,21 +49,42 @@ namespace _8bits_app_api.Repositories
                 .Include(r => r.RecipeIngredients) // Tarif malzemelerini dahil et
                 .ToListAsync(); // Bellek içine al
 
-            var recipeMatchDtos = recipesWithMatch
-                .Select(recipe => new RecipeWithMatchDto
-                {
-                    RecipeId = recipe.RecipeId,
-                    RecipeName = recipe.RecipeName,
-                    MatchPercentage = recipe.RecipeIngredients.Count == 0
-                        ? 0
-                        : recipe.RecipeIngredients.Count(ri =>
-                              userInventory.Any(ui => ui.IngredientId == ri.IngredientId)) * 100.0
-                              / recipe.RecipeIngredients.Count
-                })
-                .OrderByDescending(r => r.MatchPercentage) // Eşleşme oranına göre sıralama
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+            var recipeMatchDtos = recipesWithMatch.Select(recipe => new RecipeWithMatchDto
+            {
+                RecipeId = recipe.RecipeId,
+                RecipeName = recipe.RecipeName,
+                PersonCount = recipe.PersonCount,
+                PreparationTime = recipe.PreparationTime,
+                CookingTime = recipe.CookingTime,
+                ImageUrl = recipe.ImageUrl,
+                RecipeRate = recipe.RecipeRate,
+                Vegan = recipe.Vegan,
+                Vegetarian = recipe.Vegetarian,
+                Pescatarian = recipe.Pescatarian,
+                Keto = recipe.Keto,
+                Paleo = recipe.Paleo,
+                Mediterranean = recipe.Mediterranean,
+                GlutenFree = recipe.GlutenFree,
+                DairyFree = recipe.DairyFree,
+                LowCarb = recipe.LowCarb,
+                Flexitarian = recipe.Flexitarian,
+                Normal = recipe.Normal,
+                IsDeleted = recipe.IsDeleted,
+                Kahvalti = recipe.Kahvalti,
+                Oglen = recipe.Oglen,
+                Aksam = recipe.Aksam,
+                Tatli = recipe.Tatli,
+                Icecek = recipe.Icecek,
+                MatchPercentage = recipe.RecipeIngredients.Count == 0
+            ? 0
+            : recipe.RecipeIngredients.Count(ri =>
+                  userInventory.Any(ui => ui.IngredientId == ri.IngredientId)) * 100.0
+                  / recipe.RecipeIngredients.Count
+            })
+            .OrderByDescending(r => r.MatchPercentage)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
 
             return (recipeMatchDtos, totalCount);
         }

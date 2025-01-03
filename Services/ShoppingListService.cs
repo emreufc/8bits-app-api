@@ -37,10 +37,15 @@ namespace _8bits_app_api.Services
 
             return await _shoppingListRepository.AddToShoppingListAsync(shoppingList);
         }
-
+        public async Task<ShoppingList?> GetShoppingListItemByIdAndIngredientIdAsync(int userId, int ingredientId)
+        {
+            // Repository'den veriyi al
+            return await _shoppingListRepository.GetByUserIdAndIngredientIdAsync(userId, ingredientId);
+        }
         public async Task<IEnumerable<ShoppingListResponseDto>> GetShoppingListByUserIdAsync(int userId)
         {
             return await _shoppingListRepository.GetShoppingListByUserIdAsync(userId);
         }
+
     }
 }
