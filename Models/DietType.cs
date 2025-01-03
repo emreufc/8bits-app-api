@@ -13,5 +13,7 @@ public partial class DietType
 
     public bool? IsDeleted { get; set; }
 
+    public string? DietTypeFlag { get; set; }
+
     public virtual ICollection<DietPreference> DietPreferences { get; set; } = new List<DietPreference>();
 }

@@ -98,7 +98,7 @@ namespace _8bits_app_api.Repositories
             // Get the corresponding column names for the user's diet preferences
             var dietTypeColumns = _context.DietTypes
                 .Where(dt => userDietPreferences.Contains(dt.DietTypeId))
-                .Select(dt => dt.DietTypeName)
+                .Select(dt => dt.DietTypeFlag)
                 .ToList();
 
             string dietFilter = string.Empty;
