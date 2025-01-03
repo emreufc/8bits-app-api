@@ -37,21 +37,13 @@ namespace _8bits_app_api.Controllers
 
             var result = await _userInventoryService.GetInventoryByUserIdAsync(userId);
 
-            if (result == null)
-            {
-                return NotFound(new
-                {
-                    code = 404,
-                    message = $"No inventory found for user ID {userId}.",
-                    data = (object)null
-                });
-            }
-
             return Ok(new
             {
-                code = 200,
-                message = $"Successfully retrieved inventory for user ID {userId}.",
-                data = result
+                    code = 200,
+                    message = result == null || !result.Any()
+               ? $"No items found in the inventory for user ID {userId}."
+               : $"Successfully retrieved inventory for user ID {userId}.",
+                    data = result ?? new List<InventoryDto>() // Eğer liste null ise boş bir liste döndür
             });
         }
         // POST: api/Inventory/add
@@ -68,8 +60,8 @@ namespace _8bits_app_api.Controllers
                 });
             }
             var userId = GetCurrentUserId();
-            
-            var conversionResult = await _conversionservice.ConvertToStandardUnitAsync(inventory.IngredientId,inventory.QuantityTypeId,inventory.Quantity);
+
+            var conversionResult = await _conversionservice.ConvertToStandardUnitAsync(inventory.IngredientId, inventory.QuantityTypeId, inventory.Quantity);
             if (conversionResult == null)
             {
                 return NotFound(new

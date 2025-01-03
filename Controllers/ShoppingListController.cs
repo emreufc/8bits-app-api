@@ -128,21 +128,13 @@ namespace _8bits_app_api.Controllers
 
             var result = await _shoppingListService.GetShoppingListByUserIdAsync(userId);
 
-            if (result == null || !result.Any())
-            {
-                return NotFound(new
-                {
-                    code = 404,
-                    message = $"No shopping list found for user ID {userId}.",
-                    data = (object)null
-                });
-            }
-            
             return Ok(new
             {
-                code = 200,
-                message = $"Successfully retrieved shopping list for user ID {userId}.",
-                data = result
+                    code = 200,
+                    message = result == null || !result.Any()
+                 ? $"No items found in the shopping list for user ID {userId}."
+                 : $"Successfully retrieved shopping list for user ID {userId}.",
+                    data = result ?? new List<ShoppingListResponseDto>() // Eğer liste null ise boş bir liste döndür
             });
         }
     }
