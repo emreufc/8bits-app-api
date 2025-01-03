@@ -104,6 +104,10 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.DietTypeExplanation)
                 .HasColumnType("text")
                 .HasColumnName("diet_type_explanation");
+            entity.Property(e => e.DietTypeFlag)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("diet_type_flag");
             entity.Property(e => e.DietTypeName)
                 .HasColumnType("text")
                 .HasColumnName("diet_type_name");
