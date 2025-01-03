@@ -17,6 +17,10 @@ public partial class UserInventory
 
     public int? QuantityTypeId { get; set; }
 
+    public double? OrgQuantity { get; set; }
+
+    public int? OrgQuantityTypeId { get; set; }
+
     public virtual Ingredient? Ingredient { get; set; }
 
     public virtual QuantityType? QuantityType { get; set; }

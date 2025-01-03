@@ -19,6 +19,13 @@ namespace _8bits_app_api.Services
         }
         public async Task<ShoppingList> AddToShoppingListAsync(ShoppingListRequestDto shoppingListDto)
         {
+            var existingShoppingList = await _shoppingListRepository.GetByUserIdAndIngredientIdAsync(shoppingListDto.UserId, shoppingListDto.IngredientId);
+
+            if (existingShoppingList != null)
+            {
+                existingShoppingList.Quantity = (int.Parse(existingShoppingList.Quantity) + shoppingListDto.Quantity).ToString();
+                return await _shoppingListRepository.UpdateShoppingListAsync(existingShoppingList);
+            }
             var shoppingList = new ShoppingList
             {
                 UserId = shoppingListDto.UserId,

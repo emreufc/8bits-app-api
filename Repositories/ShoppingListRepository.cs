@@ -52,6 +52,17 @@ namespace _8bits_app_api.Repositories
                 })
                 .ToListAsync();
         }
+        public async Task<ShoppingList?> GetByUserIdAndIngredientIdAsync(int userId, int ingredientId)
+        {
+            return await _context.ShoppingLists.FirstOrDefaultAsync(sl => sl.UserId == userId && sl.IngredientId == ingredientId && (sl.IsDeleted == false));
+
+        }
+        public async Task<ShoppingList> UpdateShoppingListAsync(ShoppingList shoppingList)
+        {
+            _context.ShoppingLists.Update(shoppingList);
+            await _context.SaveChangesAsync();
+            return shoppingList;
+        }
     }
 
 }

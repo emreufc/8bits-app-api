@@ -425,6 +425,8 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("is_deleted");
+            entity.Property(e => e.OrgQuantity).HasColumnName("org_quantity");
+            entity.Property(e => e.OrgQuantityTypeId).HasColumnName("org_quantity_type_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.QuantityTypeId).HasColumnName("quantity_type_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
