@@ -133,11 +133,33 @@ namespace Recipes.Controllers
         [HttpGet("filtered")]
         public async Task<IActionResult> GetFilteredRecipes([FromQuery] List<string> categories, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Page number and page size must be greater than 0.",
+                    data = (object)null
+                });
+            }
             var userId = GetCurrentUserId();
             try
             {
                 var (recipes, totalCount) = await _recipeReadingService.GetFilteredRecipes(userId, categories, pageNumber, pageSize);
-                return Ok(new { recipes, totalCount });
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Recipes retrieved successfully.",
+                    data= recipes,
+                    pagination = new
+                    {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = totalCount,
+                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                }
+                    
+                });
             }
             catch (Exception ex)
             {
