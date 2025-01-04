@@ -106,10 +106,10 @@ namespace _8bits_app_api.Controllers
             });
         }
         [HttpPost("deduct-ingredient")]
-        public async Task<IActionResult> ProcessRecipe(int recipeId)
+        public async Task<IActionResult> ProcessRecipe([FromBody] RecipeIdDto recipeIdDto)
         {
             var userId = GetCurrentUserId();
-
+            var recipeId = recipeIdDto.RecipeId;
             if (userId <= 0)
             {
                 return BadRequest(new
