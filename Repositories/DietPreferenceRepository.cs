@@ -27,7 +27,7 @@ namespace _8bits_app_api.Repositories
         public async Task<(IEnumerable<DietPreference> dietPreferences, int totalCount)> GetDietPreferencesByUserAsync(int pageNumber, int pageSize, int userId)
         {
             var totalCount = await _context.DietPreferences.Where(p => p.IsDeleted == false && p.UserId == userId).CountAsync();
-            var dietPreferences = await _context.DietPreferences.Where(p => p.IsDeleted == false)
+            var dietPreferences = await _context.DietPreferences.Where(p => p.IsDeleted == false && p.UserId == userId)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
