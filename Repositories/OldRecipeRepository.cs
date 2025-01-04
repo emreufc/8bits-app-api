@@ -17,17 +17,18 @@ namespace _8bits_app_api.Repositories
             await _context.OldRecipes.AddAsync(oldRecipe);
             await _context.SaveChangesAsync();
         }
-        public async Task<IEnumerable<OldRecipe>> GetOldRecipesByUserIdAsync(int userId)
+        public async Task<IEnumerable<Recipe>> GetOldRecipesByUserIdAsync(int userId)
         {
             return await _context.OldRecipes
-                                 .Where(or => or.UserId == userId)
-                                 .OrderByDescending(or => or.AddedDate)
-                                 .ToListAsync();
+                .Where(or => or.UserId == userId && !(or.IsDeleted ?? false))
+                .Select(or => or.Recipe)
+                .ToListAsync();
         }
+        
         public async Task<bool> IsUserOldRecipeAsync(int userId, int recipeId)
         {
             return await _context.OldRecipes
-                .AnyAsync(or => or.UserId == userId && or.RecipeId == recipeId && !(or.IsDeleted));
+                .AnyAsync(or => or.UserId == userId && or.RecipeId == recipeId && !(or.IsDeleted ?? false));
         }
         public async Task<bool> DeleteOldRecipeAsync(int recipeId, int userId)
         {

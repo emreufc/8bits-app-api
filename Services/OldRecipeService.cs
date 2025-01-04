@@ -28,7 +28,7 @@ namespace _8bits_app_api.Services
 
             await _oldRecipesRepository.AddOldRecipeAsync(oldRecipe);
         }
-        public async Task<IEnumerable<OldRecipe>> GetOldRecipesByUserIdAsync(int userId)
+        public async Task<IEnumerable<Recipe>> GetOldRecipesByUserIdAsync(int userId)
         {
             return await _oldRecipesRepository.GetOldRecipesByUserIdAsync(userId);
         }

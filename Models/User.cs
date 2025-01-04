@@ -31,6 +31,8 @@ public partial class User
 
     public virtual ICollection<FavoriteRecipe> FavoriteRecipes { get; set; } = new List<FavoriteRecipe>();
 
+    public virtual ICollection<OldRecipe> OldRecipes { get; set; } = new List<OldRecipe>();
+
     public virtual ICollection<ShoppingList> ShoppingLists { get; set; } = new List<ShoppingList>();
 
     public virtual ICollection<UserAllergy> UserAllergies { get; set; } = new List<UserAllergy>();

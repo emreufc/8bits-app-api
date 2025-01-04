@@ -192,7 +192,17 @@ public partial class mydbcontext : DbContext
             entity.Property(e => e.AddedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+
+            entity.HasOne(d => d.Recipe).WithMany(p => p.OldRecipes)
+                .HasForeignKey(d => d.RecipeId)
+                .HasConstraintName("FK_old_recipes_recipe_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.OldRecipes)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_old_recipes_user_id");
         });
 
         modelBuilder.Entity<QuantityType>(entity =>
