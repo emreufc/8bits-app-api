@@ -61,6 +61,26 @@ namespace _8bits_app_api.Services
             await _repository.AddToInventoryAsync(newInventoryItem);
             return newInventoryItem;
         }
+
+        public async Task<IEnumerable<InventoryDto>> GetInventoryByCategoryAsync(int userId, List<string> selectedCategories)
+        {
+            var inventories =await _repository.GetInventoryByCategoryAsync(userId,selectedCategories);
+            var inventoryDtos = inventories.Select(i => new InventoryDto
+            {
+                InventoryId = i.InventoryId,
+                UserId = userId,
+                IngredientId = i.Ingredient.IngredientId,
+                IngredientName = i.Ingredient?.IngredientName,
+                IngredientCategory = i.Ingredient?.IngredientCategory,
+                IngredientImageUrl = i.Ingredient?.IngImgUrl,
+                Quantity = i.Quantity.Value,
+                QuantityTypeDesc = i.QuantityType?.QuantityTypeDesc,
+                IsDeleted = i.IsDeleted ?? false
+            }).ToList();
+            
+            return inventoryDtos;
+        }
+
         public async Task<IEnumerable<InventoryDto>> GetInventoryByUserIdAsync(int userId)
         {
             var inventories = await _repository.GetInventoryByUserIdAsync(userId);

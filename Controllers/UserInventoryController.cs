@@ -48,6 +48,43 @@ namespace _8bits_app_api.Controllers
                     data = result ?? new List<InventoryDto>() // Eğer liste null ise boş bir liste döndür
             });
         }
+        [HttpGet("/categories")]
+        public async Task<IActionResult> GetInventoryByCategory([FromQuery] List<string> selectedCategories)
+        {
+            var userId = GetCurrentUserId();
+            if (userId <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Invalid user ID. Please provide a valid user ID.",
+                    data = (object)null
+                });
+            }
+            
+            try
+            {
+                // Call the service layer to get inventory
+                var inventoryDtos = await _userInventoryService.GetInventoryByCategoryAsync(userId, selectedCategories);
+
+                if (!inventoryDtos.Any())
+                {
+                    return NotFound("No inventory items found.");
+                }
+
+                return Ok(new
+                    {
+                        code = 200,
+                        message = inventoryDtos == null || !inventoryDtos.Any()
+                            ? $"No items found in the inventory for user ID {userId}."
+                            : $"Successfully retrieved inventory for user ID {userId}.",
+                        data = inventoryDtos ?? new List<InventoryDto>() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
+        }
         // POST: api/Inventory/add
         [HttpPost("add")]
         public async Task<IActionResult> AddtoInventory([FromBody] ShoppingListRequestDto inventory)

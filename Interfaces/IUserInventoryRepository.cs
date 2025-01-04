@@ -9,5 +9,6 @@ namespace _8bits_app_api.Interfaces
         Task<bool> DeleteFromInventoryAsync(int inventory_id);
         Task<IEnumerable<UserInventory>> GetInventoryByUserIdAsync(int userId);
         Task<UserInventory> AddToInventoryAsync(UserInventory inventory);
+        Task<IEnumerable<UserInventory>> GetInventoryByCategoryAsync(int userId,List<string> selectedCategories);
     }
 }

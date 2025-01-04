@@ -11,5 +11,6 @@ namespace _8bits_app_api.Interfaces
         Task<bool> UpdateInventoryAsync(int userId, ShoppingListRequestDto inventory);
 
         Task<UserInventory> AddOrUpdateInventoryItemAsync(ShoppingListRequestDto inventoryItemDto);
+        Task<IEnumerable<InventoryDto>> GetInventoryByCategoryAsync(int userId,List<string> selectedCategories);
     }
 }
