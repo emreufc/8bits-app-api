@@ -22,9 +22,13 @@ namespace _8bits_app_api.Repositories
             return (recipeIngredients, totalCount);
         }
 
-        public async Task<RecipeIngredient> GetByIdAsync(int id)
+        public async Task<IEnumerable<RecipeIngredient>> GetByIdAsync(int id)
         {
-            return await _context.RecipeIngredients.FindAsync(id);
+            return await _context.RecipeIngredients
+                 .Include(ri => ri.Ingredient)
+                .Include(ri => ri.QuantityType)
+                .Where(ri => ri.RecipeId == id && ri.IsDeleted == false)
+                .ToListAsync(); 
         }
 
         public async Task<(IEnumerable<RecipeIngredient> recipeIngredients, int totalCount)> GetByRecipeIdPaginatedAsync(int recipeId, int pageNumber, int pageSize)

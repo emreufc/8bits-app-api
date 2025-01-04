@@ -17,7 +17,7 @@ namespace _8bits_app_api.Services
             return await _recipeIngredientRepository.GetPaginatedAsync(pageNumber, pageSize);
         }
 
-        public async Task<RecipeIngredient> GetRecipeIngredientByIdAsync(int id)
+        public async Task<IEnumerable<RecipeIngredient>> GetRecipeIngredientByIdAsync(int id)
         {
             return await _recipeIngredientRepository.GetByIdAsync(id);
         }

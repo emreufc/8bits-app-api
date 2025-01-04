@@ -29,11 +29,23 @@ namespace _8bits_app_api.Repositories
         public async Task<UserInventory> GetInventoryByUserIdAndIngredientIdAsync(int userId, int? ingredientId) { 
             return await _context.UserInventories.FirstOrDefaultAsync(ui => ui.UserId == userId && ui.IngredientId == ingredientId);
         }
+
         public async Task<UserInventory> AddToInventoryAsync(UserInventory inventory)
         {
             await _context.UserInventories.AddAsync(inventory);
             await _context.SaveChangesAsync();
             return inventory;
+        }
+
+        public async Task<IEnumerable<UserInventory>> GetInventoryByCategoryAsync(int userId, List<string> selectedCategories)
+        {
+            return await _context.UserInventories
+                .Include(ui => ui.QuantityType)
+                .Include(ui => ui.Ingredient)
+                .Where(ui => ui.UserId == userId && 
+                             ui.Ingredient != null && 
+                             (selectedCategories == null || !selectedCategories.Any() || selectedCategories.Contains(ui.Ingredient.IngredientCategory)))
+                .ToListAsync();
         }
 
         public async Task<bool> DeleteFromInventoryAsync(int inventory_id)
@@ -47,6 +59,7 @@ namespace _8bits_app_api.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
     }
 
 }
