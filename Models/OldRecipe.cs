@@ -13,5 +13,9 @@ public partial class OldRecipe
 
     public DateTime? AddedDate { get; set; }
 
-    public bool IsDeleted { get; set; }
+    public bool? IsDeleted { get; set; }
+
+    public virtual Recipe Recipe { get; set; } = null!;
+
+    public virtual User User { get; set; } = null!;
 }

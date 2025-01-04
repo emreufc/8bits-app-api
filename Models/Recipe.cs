@@ -65,6 +65,8 @@ public partial class Recipe
 
     public virtual ICollection<FavoriteRecipe> FavoriteRecipes { get; set; } = new List<FavoriteRecipe>();
 
+    public virtual ICollection<OldRecipe> OldRecipes { get; set; } = new List<OldRecipe>();
+
     public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
 
     public virtual ICollection<RecipeStep> RecipeSteps { get; set; } = new List<RecipeStep>();
