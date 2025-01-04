@@ -104,42 +104,56 @@ namespace Recipes.Controllers
         [HttpGet("keyword")]
         public async Task<IActionResult> GetRecipesByKeyword([FromQuery] string keyword, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            if (string.IsNullOrEmpty(keyword))
+            try
             {
-                return BadRequest(new
+                if (string.IsNullOrEmpty(keyword))
                 {
-                    code = 400,
-                    message = "Keyword cannot be empty.",
-                    data = (object)null
-                });
-            }
-
-            var (recipes, totalCount) = await _recipeReadingService.GetRecipesByKeywordAsync(keyword, pageNumber, pageSize);
-    
-            if (recipes == null || !recipes.Any())
-            {
-                return NotFound(new
-                {
-                    code = 404,
-                    message = "No recipes found matching the provided keyword.",
-                    data = (object)null
-                });
-            }
-
-            return Ok(new
-            {
-                code = 200,
-                message = "Recipes retrieved successfully.",
-                data = recipes,
-                pagination = new
-                {
-                    currentPage = pageNumber,
-                    pageSize,
-                    totalRecords = totalCount,
-                    totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                    return BadRequest(new
+                    {
+                        code = 400,
+                        message = "Keyword cannot be empty.",
+                        data = (object)null
+                    });
                 }
-            });
+
+                var (recipes, totalCount) = await _recipeReadingService.GetRecipesByKeywordAsync(keyword, pageNumber, pageSize);
+
+                if (recipes == null || !recipes.Any())
+                {
+                    return NotFound(new
+                    {
+                        code = 404,
+                        message = "No recipes found matching the provided keyword.",
+                        data = (object)null
+                    });
+                }
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Recipes retrieved successfully.",
+                    data = recipes,
+                    pagination = new
+                    {
+                        currentPage = pageNumber,
+                        pageSize,
+                        totalRecords = totalCount,
+                        totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                // Return a 500 Internal Server Error response
+                return StatusCode(500, new
+                {
+                    code = 500,
+                    message = "An internal server error occurred.",
+                    error = ex.Message
+                });
+            }
         }
+
 
         // GET: api/Recipes/5
         [HttpGet("{id}")]
