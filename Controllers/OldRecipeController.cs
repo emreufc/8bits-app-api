@@ -42,7 +42,7 @@ namespace _8bits_app_api.Controllers
             }
         }
         [HttpPost("ToggleOldRecipe")]
-        public async Task<IActionResult> ToggleOldRecipe([FromBody] int recipeId)
+        public async Task<IActionResult> ToggleOldRecipe(int recipeId)
         {
             var userId = GetCurrentUserId();
 
