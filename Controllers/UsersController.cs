@@ -72,7 +72,15 @@ namespace _8bits_app_api.Controllers
         {
             var userId = GetCurrentUserId();
             var user = await _userService.GetUserByIdAsync(userId);
-
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    code = 404,
+                    message = "User not found.",
+                    data = (object)null
+                });
+            }
             var userResponse = new
             {
                 userId = user.UserId,
@@ -84,15 +92,7 @@ namespace _8bits_app_api.Controllers
                 gender= user.Gender,
                 phoneNumber= user.PhoneNumber
             };
-            if (user == null)
-            {
-                return NotFound(new
-                {
-                    code = 404,
-                    message = "User not found.",
-                    data = (object)null
-                });
-            }
+            
 
             return Ok(new
             {
