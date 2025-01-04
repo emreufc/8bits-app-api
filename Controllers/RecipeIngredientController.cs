@@ -111,6 +111,7 @@ namespace _8_bits.Controllers
                 ri.IngredientId,
                 IngredientName = ri.Ingredient.IngredientName, // Ingredient ilişkisini kontrol et
                 Unit =ri.QuantityType.QuantityTypeDesc,
+                ri.Ingredient.IngImgUrl,
                 ri.Quantity,
                 ri.QuantityTypeId,
                 ri.IsDeleted
