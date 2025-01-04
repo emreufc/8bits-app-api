@@ -106,7 +106,7 @@ namespace _8bits_app_api.Controllers
             });
         }
         [HttpPost("deduct-ingredient")]
-        public async Task<IActionResult> ProcessRecipe([FromBody] int recipeId)
+        public async Task<IActionResult> ProcessRecipe(int recipeId)
         {
             var userId = GetCurrentUserId();
 
