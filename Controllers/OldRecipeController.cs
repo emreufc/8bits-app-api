@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using _8bits_app_api.Dtos;
 
 namespace _8bits_app_api.Controllers
 {
@@ -42,10 +43,10 @@ namespace _8bits_app_api.Controllers
             }
         }
         [HttpPost("ToggleOldRecipe")]
-        public async Task<IActionResult> ToggleOldRecipe(int recipeId)
+        public async Task<IActionResult> ToggleOldRecipe([FromBody] RecipeIdDto recipeIdDto)
         {
             var userId = GetCurrentUserId();
-
+            var recipeId = recipeIdDto.RecipeId;
             try
             {
                 // Tarifin old recipes listesinde olup olmadığını kontrol et
