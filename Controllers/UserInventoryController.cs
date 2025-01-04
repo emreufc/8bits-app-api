@@ -20,6 +20,8 @@ namespace _8bits_app_api.Controllers
             _conversionservice = conversionservice;
             _shoppingListService = shoppingListService;
         }
+
+
         // GET: api/Inventory/{userId}
         [HttpGet("myInventory")]
         public async Task<IActionResult> GetmyInventoryList()
@@ -48,6 +50,64 @@ namespace _8bits_app_api.Controllers
                     data = result ?? new List<InventoryDto>() // Eğer liste null ise boş bir liste döndür
             });
         }
+       
+        [HttpGet("check-inventory/{recipeId}")]
+        public async Task<IActionResult> CheckInventory(int recipeId)
+        {
+            var userId = GetCurrentUserId();
+
+            var (isSufficient, missingIngredients) = await _userInventoryService.IsInventorySufficientAsync(recipeId, userId);
+
+            return Ok(new
+            {
+                code = 200,
+                message = isSufficient
+                    ? "Envanterinizde tarif için yeterli malzeme var."
+                    : "Envanterinizde tarif için yeterli malzeme yok.",
+                isSufficient = isSufficient,
+                data = isSufficient ? null : missingIngredients
+            });
+        }
+        [HttpPost("deduct-ingredient")]
+        public async Task<IActionResult> ProcessRecipe([FromBody] int recipeId)
+        {
+            var userId = GetCurrentUserId();
+
+            if (userId <= 0)
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Geçersiz kullanıcı ID.",
+                    data = (object)null
+                });
+            }
+
+            // Elinde yeterli malzeme var mı kontrol et
+            var isSufficient = await _userInventoryService.IsInventorySufficientAsync(recipeId, userId);
+
+            if (isSufficient.IsSufficient == false)
+            {
+                var missingIngredients = isSufficient.MissingIngredients;
+
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Elinde yeterli malzeme yok.",
+                    data = missingIngredients
+                });
+            }
+
+            // Envanterden düş
+            await _userInventoryService.DeductIngredientsFromInventoryAsync(recipeId, userId);
+
+            return Ok(new
+            {
+                code = 200,
+                message = "Tarif başarıyla tamamlandı ve envanterden düşüldü."
+            });
+        }
+
         // POST: api/Inventory/add
         [HttpPost("add")]
         public async Task<IActionResult> AddtoInventory([FromBody] ShoppingListRequestDto inventory)

@@ -29,6 +29,7 @@ namespace _8bits_app_api.Repositories
         public async Task<UserInventory> GetInventoryByUserIdAndIngredientIdAsync(int userId, int? ingredientId) { 
             return await _context.UserInventories.FirstOrDefaultAsync(ui => ui.UserId == userId && ui.IngredientId == ingredientId);
         }
+
         public async Task<UserInventory> AddToInventoryAsync(UserInventory inventory)
         {
             await _context.UserInventories.AddAsync(inventory);
@@ -47,6 +48,7 @@ namespace _8bits_app_api.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
     }
 
 }

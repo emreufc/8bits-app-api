@@ -11,5 +11,7 @@ namespace _8bits_app_api.Interfaces
         Task<bool> UpdateInventoryAsync(int userId, ShoppingListRequestDto inventory);
 
         Task<UserInventory> AddOrUpdateInventoryItemAsync(ShoppingListRequestDto inventoryItemDto);
+        Task<(bool IsSufficient, List<MissingIngredientDto> MissingIngredients)> IsInventorySufficientAsync(int recipeId, int userId);
+        Task<bool> DeductIngredientsFromInventoryAsync(int recipeId, int userId);
     }
 }

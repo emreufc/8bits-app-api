@@ -2,6 +2,7 @@
 using _8bits_app_api.Interfaces;
 using _8bits_app_api.Models;
 using _8bits_app_api.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace _8bits_app_api.Services
 {
@@ -9,9 +10,11 @@ namespace _8bits_app_api.Services
     {
         private readonly IConversionService _conversionservice;
         private readonly IUserInventoryRepository _repository;
-        public UserInvertoryService(IUserInventoryRepository repository,IConversionService conversionService) {
+        private readonly IRecipeIngredientRepository _recipeingredientRepository;
+        public UserInvertoryService(IUserInventoryRepository repository,IConversionService conversionService,IRecipeIngredientRepository recipeIngredientRepository) {
             _repository = repository;
             _conversionservice = conversionService;
+            _recipeingredientRepository = recipeIngredientRepository;
         }
         public async Task<UserInventory> AddToInventoryAsync(ShoppingListRequestDto inventory)
         {
@@ -110,6 +113,106 @@ namespace _8bits_app_api.Services
 
             return await _repository.UpdateInventoryAsync(existingUserInventory); // Envanteri güncelle ve sonucu döndür
         }
+        public async Task<(bool IsSufficient, List<MissingIngredientDto> MissingIngredients)> IsInventorySufficientAsync(int recipeId, int userId)
+        {
+            // Tarif malzemelerini al
+            var recipeIngredients = await _recipeingredientRepository.GetByIdAsync(recipeId);
+            // Kullanıcının envanterini al
+            var userInventory = await _repository.GetInventoryByUserIdAsync(userId);
+
+            // Eksik malzemeleri tutacak liste
+            var missingIngredients = new List<MissingIngredientDto>();
+            var isSufficient = true;
+
+            foreach (var ingredient in recipeIngredients)
+            {
+                // Envanterde malzeme kontrolü yap
+                var inventoryItem = userInventory.FirstOrDefault(ui => ui.IngredientId == ingredient.IngredientId);
+
+                if (inventoryItem == null)
+                {
+                    // Envanterde bulunmayan malzeme eksik
+                    isSufficient = false;
+                    missingIngredients.Add(new MissingIngredientDto
+                    {
+                        RecipeIngredientId = ingredient.RecipeIngredientId,
+                        RecipeId = ingredient.RecipeId,
+                        IngredientId = ingredient.IngredientId,
+                        IngredientName = ingredient.Ingredient.IngredientName,
+                        Unit = ingredient.QuantityType.QuantityTypeDesc,
+                        Quantity = ingredient.Quantity,
+                        QuantityTypeId = ingredient.QuantityTypeId,
+                        IsDeleted = ingredient.IsDeleted ?? false
+                    });
+                }
+                else
+                {
+                    // Envanterde varsa miktar kontrolü yap
+                    var conversion = await _conversionservice.ConvertToStandardUnitAsync(
+                        ingredient.IngredientId,
+                        ingredient.QuantityTypeId,
+                        ingredient.Quantity
+                    );
+
+                    if (inventoryItem.Quantity < conversion.ConvertedQuantity)
+                    {
+                        isSufficient = false;
+                        var missingQuantity = conversion.ConvertedQuantity - inventoryItem.Quantity;
+                        missingIngredients.Add(new MissingIngredientDto
+                        {
+                            RecipeIngredientId = ingredient.RecipeIngredientId,
+                            RecipeId = ingredient.RecipeId,
+                            IngredientId = ingredient.IngredientId,
+                            IngredientName = ingredient.Ingredient.IngredientName,
+                            Unit = ingredient.QuantityType.QuantityTypeDesc,
+                            Quantity = missingQuantity,
+                            QuantityTypeId = ingredient.QuantityTypeId,
+                            IsDeleted = ingredient.IsDeleted ?? false
+                        });
+                    }
+                }
+            }
+
+            return (isSufficient, missingIngredients);
+        }
+
+        public async Task<bool> DeductIngredientsFromInventoryAsync(int recipeId, int userId)
+        {
+
+            var recipeIngredients = await _recipeingredientRepository.GetByIdAsync(recipeId);
+
+            foreach (var ingredient in recipeIngredients)
+            {
+
+                var inventoryItem = await _repository.GetInventoryByUserIdAndIngredientIdAsync(userId, ingredient.IngredientId);
+
+                if (inventoryItem == null)
+                {
+                    throw new Exception($"Ingredient ID {ingredient.IngredientId} bulunamadı.");
+                }
+
+
+                var conversion = await _conversionservice.ConvertToStandardUnitAsync(
+                    ingredient.IngredientId,
+                    ingredient.QuantityTypeId,
+                    ingredient.Quantity
+                );
+
+                if (inventoryItem.Quantity < conversion.ConvertedQuantity)
+                {
+                    throw new Exception($"Ingredient ID {ingredient.IngredientId} için yetersiz miktar.");
+                }
+
+                // Miktarı düş
+                inventoryItem.Quantity -= conversion.ConvertedQuantity;
+                await _repository.UpdateInventoryAsync(inventoryItem); // `await` ekleyerek asenkron bekleme yapın
+            }
+
+            return true;
+        }
+
+
+
 
     }
 }
