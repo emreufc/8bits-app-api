@@ -27,6 +27,8 @@ public partial class User
 
     public string? Gender { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public virtual ICollection<DietPreference> DietPreferences { get; set; } = new List<DietPreference>();
 
     public virtual ICollection<FavoriteRecipe> FavoriteRecipes { get; set; } = new List<FavoriteRecipe>();

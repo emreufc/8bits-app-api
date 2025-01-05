@@ -46,7 +46,6 @@ namespace _8bits_app_api.Controllers
                 Name = model.Name,
                 Surname = model.Surname,
                 Email = model.Email,
-                Gender = model.Gender,
                 PasswordHash = hashedPassword,
                 PasswordSalt = salt,
                 DateOfBirth = dateOfBirth,

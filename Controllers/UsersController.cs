@@ -90,7 +90,8 @@ namespace _8bits_app_api.Controllers
                 dateOfBirth = user.DateOfBirth,
                 role = user.Role,
                 gender= user.Gender,
-                phoneNumber= user.PhoneNumber
+                phoneNumber= user.PhoneNumber,
+                imageUrl = user.ImageUrl
             };
             
 

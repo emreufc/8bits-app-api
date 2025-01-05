@@ -380,6 +380,7 @@ public partial class mydbcontext : DbContext
                 .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("gender");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("is_deleted");
