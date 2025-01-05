@@ -1,4 +1,5 @@
-﻿using _8bits_app_api.Models;
+﻿using _8bits_app_api.Controllers;
+using _8bits_app_api.Models;
 using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace _8_bits.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RecipeStepController : ControllerBase
+    public class RecipeStepController : BaseController
     {
         private readonly IRecipeStepReadingService _recipeStepService;
 
@@ -116,6 +117,76 @@ namespace _8_bits.Controllers
                     totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
                 }
             });
+        }
+
+        [HttpPost("admin-add-recipe-step")]
+        public async Task<IActionResult> AddSteps(int recipeId, [FromBody] List<RecipeStep> steps)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                if (steps == null || !steps.Any())
+                {
+                    return BadRequest(new { message = "Step list cannot be empty." });
+                }
+
+                await _recipeStepService.AddRecipeStepsAsync(recipeId, steps);
+                return Ok(new { message = "Recipe steps added successfully." });
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpPut("admin-update-recipe-step")]
+        public async Task<IActionResult> UpdateSteps(int recipeId, [FromBody] RecipeStep step)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                if (step == null)
+                {
+                    return BadRequest(new { message = "Invalid data." });
+                }
+
+                // Ensure the provided RecipeStepsId matches the step's ID
+                step.RecipeId = recipeId;
+
+                try
+                {
+                    await _recipeStepService.UpdateRecipeStepAsync(recipeId, step);
+                    return Ok(new { message = "Recipe step updated successfully." });
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    return NotFound(new { message = ex.Message });
+                }
+                
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpDelete("admin-delete-recipe-step")]
+        public async Task<IActionResult> DeleteStep(int recipeId, byte stepNum)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                try
+                {
+                    await _recipeStepService.DeleteRecipeStepAsync(recipeId, stepNum);
+                    return Ok(new {code=200, message = "Recipe step deleted successfully." });
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    return NotFound(new { message = ex.Message });
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
     }
 }

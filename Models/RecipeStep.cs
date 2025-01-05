@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace _8bits_app_api.Models;
 
@@ -17,5 +18,6 @@ public partial class RecipeStep
 
     public bool? IsDeleted { get; set; }
 
+    [JsonIgnore]
     public virtual Recipe? Recipe { get; set; }
 }

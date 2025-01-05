@@ -37,6 +37,80 @@ namespace _8bits_app_api.Repositories
                 .ToListAsync();
             return (recipeSteps, totalCount);
         }
+
+        public async Task AddRecipeStepsAsync(int recipeId, List<RecipeStep> steps)
+        {
+            var recipe = await _context.Recipes
+                .FirstOrDefaultAsync(r => r.RecipeId == recipeId && !(r.IsDeleted ?? false));
+
+            if (recipe == null)
+            {
+                throw new KeyNotFoundException("Recipe not found or deleted.");
+            }
+
+            // Get the current maximum RecipeStepsId
+            var maxId = await _context.RecipeSteps
+                .Where(rs => !(rs.IsDeleted ?? false))
+                .MaxAsync(rs => (int?)rs.RecipeStepsId) ?? 0;
+
+            byte stepNum = 1;
+
+            foreach (var step in steps)
+            {
+                maxId++; // Increment ID for each new step
+
+                step.RecipeStepsId = maxId;
+                step.RecipeId = recipeId;
+                step.RecipeName=recipe.RecipeName; 
+                step.StepNum = stepNum;
+                step.IsDeleted = false; // Ensure it's not marked as deleted
+                stepNum++;
+
+                await _context.RecipeSteps.AddAsync(step);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRecipeStepAsync(int recipeId,RecipeStep step)
+        {
+            var existingStep = await _context.RecipeSteps
+                .FirstOrDefaultAsync(rs => rs.RecipeId == recipeId 
+                                           && rs.RecipeStepsId == step.RecipeStepsId 
+                                           && !(rs.IsDeleted ?? false));
+
+            if (existingStep == null)
+            {
+                throw new KeyNotFoundException("RecipeStep not found or deleted.");
+            }
+
+            // Update fields
+            existingStep.StepNum = step.StepNum;
+            existingStep.Step = step.Step;
+
+            _context.RecipeSteps.Update(existingStep);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteRecipeStepAsync(int recipeId, byte stepNum)
+        {
+            // Fetch the RecipeStep with the given RecipeId and StepNum
+            var step = await _context.RecipeSteps
+                .FirstOrDefaultAsync(rs => rs.RecipeId == recipeId 
+                                           && rs.StepNum == stepNum 
+                                           && !(rs.IsDeleted ?? false));
+
+            if (step == null)
+            {
+                throw new KeyNotFoundException("RecipeStep not found or already deleted.");
+            }
+
+            // Perform soft delete
+            step.IsDeleted = true;
+
+            _context.RecipeSteps.Update(step);
+            await _context.SaveChangesAsync();
+        }
     }
 
 }

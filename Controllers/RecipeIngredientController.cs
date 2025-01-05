@@ -1,12 +1,14 @@
-﻿using _8bits_app_api.Models;
+﻿using _8bits_app_api.Controllers;
+using _8bits_app_api.Models;
 using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
+using _8bits_app_api.Dtos;
 
 namespace _8_bits.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RecipeIngredientController : ControllerBase
+    public class RecipeIngredientController : BaseController
     {
         private readonly IRecipeIngredientReadingService _recipeIngredientService;
 
@@ -130,6 +132,92 @@ namespace _8_bits.Controllers
                     totalPages = (int)Math.Ceiling((double)totalCount / pageSize)
                 }
             });
+        }
+
+        [HttpPost("admin-add-recipe-ingredient")]
+        public async Task<IActionResult> AddRecipeIngredient(int recipeId, [FromBody] List<RecipeIngredientDto> ingredientDtos)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                if (ingredientDtos == null || !ingredientDtos.Any())
+                {
+                    return BadRequest(new { message = "Ingredient list cannot be empty." });
+                }
+
+                // Map DTOs to RecipeIngredient model
+                var ingredients = ingredientDtos.Select(dto => new RecipeIngredient
+                {
+                    RecipeId = recipeId,
+                    IngredientId = dto.IngredientId,
+                    Quantity = dto.Quantity,
+                    QuantityTypeId = dto.QuantityTypeId,
+                    IsDeleted = false
+                }).ToList();
+
+                await _recipeIngredientService.AddRecipeIngredientAsync(recipeId, ingredients);
+                return Ok(new { message = "Ingredients added successfully." });
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpPut("admin-update-recipe-ingredient")]
+        public async Task<IActionResult> UpdateRecipeIngredient(int recipeId, int ingredientId, [FromBody] RecipeIngredientDto ingredientDto)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                if (ingredientDto == null)
+                {
+                    return BadRequest(new { message = "Invalid data." });
+                }
+
+                var recipeIngredient = new RecipeIngredient
+                {
+                    RecipeId = recipeId,
+                    IngredientId = ingredientId,
+                    Quantity = ingredientDto.Quantity,
+                    QuantityTypeId = ingredientDto.QuantityTypeId
+                };
+
+                try
+                {
+                    await _recipeIngredientService.UpdateRecipeIngredientAsync(recipeIngredient);
+                    return Ok(new { message = "RecipeIngredient updated successfully." });
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    return NotFound(new { message = ex.Message });
+                }
+                
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpDelete("admin-delete-recipe-ingredient")]
+        public async Task<IActionResult> DeleteRecipeIngredient(int recipeId, int ingredientId)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                try
+                {
+                    await _recipeIngredientService.DeleteRecipeIngredientAsync(recipeId, ingredientId);
+                    return Ok(new { code=200,message = "RecipeIngredient deleted successfully." });
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    return NotFound(new { message = ex.Message });
+                }
+
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
     }

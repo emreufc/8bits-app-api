@@ -26,6 +26,21 @@ namespace _8bits_app_api.Services
         {
             return await _recipeStepRepository.GetByRecipeIdPaginatedAsync(recipeId, pageNumber, pageSize);
         }
+
+        public async Task AddRecipeStepsAsync(int recipeId, List<RecipeStep> steps)
+        {
+            await _recipeStepRepository.AddRecipeStepsAsync(recipeId, steps);
+        }
+
+        public async Task UpdateRecipeStepAsync(int recipeId,RecipeStep step)
+        {
+            await _recipeStepRepository.UpdateRecipeStepAsync(recipeId,step);
+        }
+
+        public async Task DeleteRecipeStepAsync(int recipeId, byte stepNum)
+        {
+            await _recipeStepRepository.DeleteRecipeStepAsync(recipeId, stepNum);
+        }
     }
 
 }
