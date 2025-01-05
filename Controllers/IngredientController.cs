@@ -1,4 +1,5 @@
-﻿using _8bits_app_api.Models;
+﻿using _8bits_app_api.Controllers;
+using _8bits_app_api.Models;
 using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace Ingredients.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IngredientsController : ControllerBase
+    public class IngredientsController : BaseController
     {
         private readonly IIngredientReadingService _ingredientReadingService;
 
@@ -102,6 +103,57 @@ namespace Ingredients.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpPost("admin-add-ingredient")]
+        public async Task<IActionResult> Add([FromBody] Ingredient ingredient)
+        {
+            if(User.IsInRole("Admin")){
+                await _ingredientReadingService.AddIngredientAsync(ingredient);
+                var createdIngredient = await _ingredientReadingService.GetIngredientByIdAsync(ingredient.IngredientId);
+                return CreatedAtAction(null, new { id = createdIngredient.Ingredient.IngredientId }, createdIngredient);  
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpPut("admin-edit-ingredient")]
+        public async Task<IActionResult> Edit([FromBody] Ingredient ingredient)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                await _ingredientReadingService.UpdateIngredientAsync(ingredient);
+                return Ok(new
+                    {
+                        code = 200,
+                        message = $"Ingredient with ID {ingredient.IngredientId} updated successfully.",
+                        data = ingredient
+                    });
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpDelete("admin-delete-ingredient")]
+        public async Task<IActionResult> Delete([FromBody] int ingredientId)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                await _ingredientReadingService.DeleteIngredientAsync(ingredientId);
+                return Ok(new
+                    {
+                        code = 200,
+                        message = $"Ingredient with ID {ingredientId} deleted successfully.",
+                        data = ingredientId
+                    });
+            }
+            else
+            {
+                return Unauthorized();
             }
         }
     }

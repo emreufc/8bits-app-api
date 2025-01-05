@@ -29,6 +29,20 @@ namespace _8bits_app_api.Services
             return await _ingredientRepository.GetIngredientByCategoryAsync(selectedCategories, pageNumber, pageSize) ;
         }
 
+        public async Task AddIngredientAsync(Ingredient ingredient)
+        {
+            await _ingredientRepository.AddIngredientAsync(ingredient);
+        }
+
+        public async Task UpdateIngredientAsync(Ingredient ingredient)
+        {
+            await _ingredientRepository.UpdateIngredientAsync(ingredient);
+        }
+
+        public async Task DeleteIngredientAsync(int id)
+        {
+            await _ingredientRepository.DeleteIngredientAsync(id);
+        }
     }
 
 }

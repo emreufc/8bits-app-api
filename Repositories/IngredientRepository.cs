@@ -113,6 +113,34 @@ namespace _8bits_app_api.Repositories
 
             return (ingredients, totalCount);
         }
+
+        public async Task AddIngredientAsync(Ingredient ingredient)
+        {
+            var maxId = await _context.Ingredients
+                .Where(i => !(i.IsDeleted ?? false))
+                .MaxAsync(i => (int?)i.IngredientId) ?? 0;
+
+            // Set the new IngredientId
+            ingredient.IngredientId = maxId + 1;
+            await _context.Ingredients.AddAsync(ingredient);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateIngredientAsync(Ingredient ingredient)
+        {
+            _context.Ingredients.Update(ingredient);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteIngredientAsync(int id)
+        {
+            var ingredient = await GetByIdAsync(id);
+            if (ingredient != null)
+            {
+                ingredient.Ingredient.IsDeleted = true;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 
 }
