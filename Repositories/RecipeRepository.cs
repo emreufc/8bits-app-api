@@ -167,5 +167,34 @@ namespace _8bits_app_api.Repositories
             return (pagedRecipes, totalCount);
         }
 
+        public async Task AddRecipeAsync(Recipe recipe)
+        {
+            var maxId = await _context.Recipes
+                .Where(r => !(r.IsDeleted ?? false))
+                .MaxAsync(r => (int?)r.RecipeId) ?? 0;
+
+            // Set the new RecipeId
+            recipe.RecipeId = maxId + 1;
+
+            // Add the recipe to the database
+            await _context.Recipes.AddAsync(recipe);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRecipeAsync(Recipe recipe)
+        {
+            _context.Recipes.Update(recipe);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteRecipeAsync(int recipeId)
+        {
+            var recipe = await GetRecipeByIdAsync(recipeId);
+            if (recipe != null)
+            {
+                recipe.IsDeleted = true;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

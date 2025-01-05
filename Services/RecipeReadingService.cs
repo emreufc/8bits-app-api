@@ -34,5 +34,19 @@ namespace _8bits_app_api.Services
             return await _recipeRepository.GetFilteredRecipes(userId, selectedCategories, pageNumber, pageSize);
         }
 
+        public async Task AddRecipeAsync(Recipe recipe)
+        {
+            await _recipeRepository.AddRecipeAsync(recipe);
+        }
+
+        public async Task UpdateRecipeAsync(Recipe recipe)
+        {
+            await _recipeRepository.UpdateRecipeAsync(recipe);
+        }
+
+        public async Task DeleteRecipeAsync(int recipeId)
+        {
+            await _recipeRepository.DeleteRecipeAsync(recipeId);
+        }
     }
 }

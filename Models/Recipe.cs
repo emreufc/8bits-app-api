@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace _8bits_app_api.Models;
 
@@ -63,11 +64,15 @@ public partial class Recipe
 
     public bool? Icecek { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<FavoriteRecipe> FavoriteRecipes { get; set; } = new List<FavoriteRecipe>();
 
+    [JsonIgnore]
     public virtual ICollection<OldRecipe> OldRecipes { get; set; } = new List<OldRecipe>();
 
+    [JsonIgnore]
     public virtual ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
 
+    [JsonIgnore]
     public virtual ICollection<RecipeStep> RecipeSteps { get; set; } = new List<RecipeStep>();
 }

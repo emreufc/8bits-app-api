@@ -220,5 +220,58 @@ namespace Recipes.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpPost("admin-add-recipes")]
+        public async Task<IActionResult> AddRecipe([FromBody] Recipe recipe)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                await _recipeReadingService.AddRecipeAsync(recipe);
+                var createdRecipe = await _recipeReadingService.GetRecipeByIdAsync(recipe.RecipeId);
+                return CreatedAtAction(null, new { id = createdRecipe.RecipeId }, createdRecipe);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpPut("admin-edit-recipes")]
+        public async Task<IActionResult> EditRecipe([FromBody] Recipe recipe)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                await _recipeReadingService.UpdateRecipeAsync(recipe);
+                return Ok(new
+                    {
+                        code = 200,
+                        message = "Recipe updated successfully.",
+                        data = recipe
+                    });
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpDelete("admin-delete-recipes")]
+        public async Task<IActionResult> DeleteRecipe(int id)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                await _recipeReadingService.DeleteRecipeAsync(id);
+                return Ok(new
+                {
+                    code = 200,
+                    message = "Recipe deleted successfully.",
+                    data = id
+                });
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
     }
 }

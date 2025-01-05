@@ -10,5 +10,8 @@ namespace _8bits_app_api.Repositories
         Task<(IEnumerable<RecipeWithMatchDto> recipes, int totalCount)> GetAllRecipesWithMatchAsync(int userId, int pageNumber, int pageSize);
         Task<(IEnumerable<Recipe> recipes, int totalCount)> GetRecipesByKeywordAsync(string keyword,int pageNumber,int pageSize);
         Task<(IEnumerable<Recipe> recipes, int totalCount)> GetFilteredRecipes(int userId, List<string> selectedCategories,int pageNumber, int pageSize);
+        Task AddRecipeAsync(Recipe recipe);
+        Task UpdateRecipeAsync(Recipe recipe);
+        Task DeleteRecipeAsync(int recipeId);
     }
 }
