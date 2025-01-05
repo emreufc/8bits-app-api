@@ -11,6 +11,7 @@ namespace _8bits_app_api.Services
         Task AddIngredientAsync(Ingredient ingredient);
         Task UpdateIngredientAsync(Ingredient ingredient);
         Task DeleteIngredientAsync(int id);
+        Task<(IEnumerable<IngredientWithQuantitiesDto> ingredients, int totalCount)> SearchIngredientsAsync(string keyword, int pageNumber, int pageSize);
 
     }
 

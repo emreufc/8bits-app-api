@@ -1,4 +1,5 @@
 ﻿using _8bits_app_api.Controllers;
+using _8bits_app_api.Dtos;
 using _8bits_app_api.Models;
 using _8bits_app_api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -137,9 +138,48 @@ namespace Ingredients.Controllers
                 return Unauthorized();
             }
         }
+        
+        [HttpGet("keyword")]
+        public async Task<IActionResult> SearchIngredients([FromQuery] string keyword, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return BadRequest(new
+                {
+                    code = 400,
+                    message = "Keyword cannot be empty.",
+                    data = (object)null
+                });
+            }
 
-        [HttpDelete("admin-delete-ingredient")]
-        public async Task<IActionResult> Delete([FromBody] int ingredientId)
+            var result = await _ingredientReadingService.SearchIngredientsAsync(keyword, pageNumber, pageSize);
+            if (result.ingredients == null || !result.ingredients.Any())
+            {
+                return NotFound(new
+                {
+                    code = 404,
+                    message = "No ingredients found matching the keyword.",
+                    data = (object)null
+                });
+            }
+
+            return Ok(new
+            {
+                code = 200,
+                message = $"Successfully retrieved ingredients matching the keyword '{keyword}'.",
+                data = result.ingredients,
+                pagination = new
+                {
+                    currentPage = pageNumber,
+                    pageSize,
+                    totalRecords = result.totalCount,
+                    totalPages = (int)Math.Ceiling((double)result.totalCount / pageSize)
+                }
+            });
+        }
+
+        [HttpDelete("admin-delete-ingredient/{ingredientId}")]
+        public async Task<IActionResult> Delete([FromQuery] int ingredientId)
         {
             if (User.IsInRole("Admin"))
             {
