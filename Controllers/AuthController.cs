@@ -67,7 +67,7 @@ namespace _8bits_app_api.Controllers
                 message = "Login successful.",
                 accessToken = token,
                 uid = createdUser.UserId,
-                expiration = DateTime.UtcNow.AddMinutes(30),
+                expiration = DateTime.UtcNow.AddMinutes(200),
                 refreshToken = refreshToken.RefreshToken
             });
         }
@@ -97,7 +97,44 @@ namespace _8bits_app_api.Controllers
                 message = "Login successful.",
                 accessToken = token,
                 uid = user.UserId,
-                expiration = DateTime.UtcNow.AddMinutes(30),
+                expiration = DateTime.UtcNow.AddMinutes(200),
+                refreshToken = refreshToken.RefreshToken
+            });
+        }
+        
+        [HttpPost("admin-login")]
+        public async Task<IActionResult> AdminLogin([FromBody] LoginModel model)
+        {
+            // Kullanıcıyı email ile bul
+            var user = await _userService.GetUserByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "Admin not found for this email." });
+            }
+
+            // Kullanıcının admin olup olmadığını kontrol et
+            if (user.Role != "Admin")
+            {
+                return Unauthorized(new { message = "User does not have admin privileges." });
+            }
+
+            // Şifre doğrulama
+            var isValidPassword = _passwordService.ValidatePassword(user.PasswordHash, user.PasswordSalt, model.Password);
+            if (!isValidPassword)
+            {
+                return Unauthorized(new { message = "Invalid credentials" });
+            }
+
+            // Token oluştur
+            var token = _tokenService.GenerateJwtToken(user);
+            var refreshToken = await _refreshTokenService.CreateRefreshTokenAsync(user.UserId);
+
+            return Ok(new
+            {
+                message = "Admin login successful.",
+                accessToken = token,
+                uid = user.UserId,
+                expiration = DateTime.UtcNow.AddMinutes(200),
                 refreshToken = refreshToken.RefreshToken
             });
         }
