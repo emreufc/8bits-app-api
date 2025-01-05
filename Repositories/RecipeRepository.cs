@@ -51,91 +51,62 @@ namespace _8bits_app_api.Repositories
 
         public async Task<(IEnumerable<RecipeWithMatchDto> recipes, int totalCount)> GetAllRecipesWithMatchAsync(int userId, int pageNumber, int pageSize)
         {
-            // Fetch user inventory
+            // Kullanıcının envanterini bellek içine al
             var userInventory = await _context.UserInventories
                 .Where(ui => ui.UserId == userId)
                 .ToListAsync();
 
-            // Fetch total recipe count
+            // Toplam tarif sayısını al
             var totalCount = await _context.Recipes
                 .Where(r => r.IsDeleted == false)
                 .CountAsync();
 
-            // Fetch all recipes with ingredients
+            // Tarifleri al ve eşleşme oranını hesapla
             var recipesWithMatch = await _context.Recipes
                 .Where(r => r.IsDeleted == false)
-                .Include(r => r.RecipeIngredients)
-                .ThenInclude(ri => ri.QuantityType) // Include QuantityType for conversion
-                .ToListAsync();
+                .Include(r => r.RecipeIngredients) // Tarif malzemelerini dahil et
+                .ToListAsync(); // Bellek içine al
 
-            var recipeMatchDtos = new List<RecipeWithMatchDto>();
-
-            foreach (var recipe in recipesWithMatch)
+            var recipeMatchDtos = recipesWithMatch.Select(recipe => new RecipeWithMatchDto
             {
-                double totalMatch = 0;
-                int totalIngredients = recipe.RecipeIngredients.Count;
+                RecipeId = recipe.RecipeId,
+                RecipeName = recipe.RecipeName,
+                PersonCount = recipe.PersonCount,
+                PreparationTime = recipe.PreparationTime,
+                CookingTime = recipe.CookingTime,
+                ImageUrl = recipe.ImageUrl,
+                RecipeRate = recipe.RecipeRate,
+                Vegan = recipe.Vegan,
+                Vegetarian = recipe.Vegetarian,
+                Pescatarian = recipe.Pescatarian,
+                Keto = recipe.Keto,
+                Paleo = recipe.Paleo,
+                Mediterranean = recipe.Mediterranean,
+                GlutenFree = recipe.GlutenFree,
+                DairyFree = recipe.DairyFree,
+                LowCarb = recipe.LowCarb,
+                Flexitarian = recipe.Flexitarian,
+                Normal = recipe.Normal,
+                IsDeleted = recipe.IsDeleted,
+                Kahvalti = recipe.Kahvalti,
+                Oglen = recipe.Oglen,
+                Aksam = recipe.Aksam,
+                Tatli = recipe.Tatli,
+                Icecek = recipe.Icecek,
+                MatchPercentage = recipe.RecipeIngredients.Count == 0
+            ? 0
+            : recipe.RecipeIngredients.Count(ri =>
+                  userInventory.Any(ui => ui.IngredientId == ri.IngredientId)) * 100.0
+                  / recipe.RecipeIngredients.Count
+            })
+            .OrderByDescending(r => r.MatchPercentage)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
 
-                foreach (var ingredient in recipe.RecipeIngredients)
-                {
-                    var inventoryItem = userInventory.FirstOrDefault(ui => ui.IngredientId == ingredient.IngredientId);
-
-                    if (inventoryItem != null)
-                    {
-                        // Perform conversion
-                        var conversionResult = await _conversionService.ConvertToStandardUnitAsync(
-                            ingredient.IngredientId,
-                            ingredient.QuantityTypeId,
-                            ingredient.Quantity
-                        );
-
-                        if (inventoryItem.Quantity >= conversionResult.ConvertedQuantity)
-                        {
-                            totalMatch++;
-                        }
-                    }
-                }
-
-                var matchPercentage = totalIngredients == 0 ? 0 : (totalMatch / totalIngredients) * 100;
-
-                recipeMatchDtos.Add(new RecipeWithMatchDto
-                {
-                    RecipeId = recipe.RecipeId,
-                    RecipeName = recipe.RecipeName,
-                    PersonCount = recipe.PersonCount,
-                    PreparationTime = recipe.PreparationTime,
-                    CookingTime = recipe.CookingTime,
-                    ImageUrl = recipe.ImageUrl,
-                    RecipeRate = recipe.RecipeRate,
-                    Vegan = recipe.Vegan,
-                    Vegetarian = recipe.Vegetarian,
-                    Pescatarian = recipe.Pescatarian,
-                    Keto = recipe.Keto,
-                    Paleo = recipe.Paleo,
-                    Mediterranean = recipe.Mediterranean,
-                    GlutenFree = recipe.GlutenFree,
-                    DairyFree = recipe.DairyFree,
-                    LowCarb = recipe.LowCarb,
-                    Flexitarian = recipe.Flexitarian,
-                    Normal = recipe.Normal,
-                    IsDeleted = recipe.IsDeleted,
-                    Kahvalti = recipe.Kahvalti,
-                    Oglen = recipe.Oglen,
-                    Aksam = recipe.Aksam,
-                    Tatli = recipe.Tatli,
-                    Icecek = recipe.Icecek,
-                    MatchPercentage = matchPercentage
-                });
-            }
-
-            // Sort recipes by match percentage and paginate
-            var paginatedRecipes = recipeMatchDtos
-                .OrderByDescending(r => r.MatchPercentage)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            return (paginatedRecipes, totalCount);
+            return (recipeMatchDtos, totalCount);
         }
+
 
         public async Task<(IEnumerable<Recipe> recipes, int totalCount)> GetFilteredRecipes(int userId, List<string> selectedCategories, int pageNumber, int pageSize)
         {

@@ -50,7 +50,7 @@ namespace _8bits_app_api.Controllers
                     data = result ?? new List<InventoryDto>() // Eğer liste null ise boş bir liste döndür
             });
         }
-        [HttpGet("/categories")]
+        [HttpGet("categories")]
         public async Task<IActionResult> GetInventoryByCategory([FromQuery] List<string> selectedCategories)
         {
             var userId = GetCurrentUserId();

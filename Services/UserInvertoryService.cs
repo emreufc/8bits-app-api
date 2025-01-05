@@ -225,7 +225,17 @@ namespace _8bits_app_api.Services
 
                 // Miktarı düş
                 inventoryItem.Quantity -= conversion.ConvertedQuantity;
-                await _repository.UpdateInventoryAsync(inventoryItem); // `await` ekleyerek asenkron bekleme yapın
+
+                if (inventoryItem.Quantity <= 0)
+                {
+           
+                    await _repository.DeleteFromInventoryAsync(inventoryItem.InventoryId);
+                }
+                else
+                {
+   
+                    await _repository.UpdateInventoryAsync(inventoryItem);
+                }
             }
 
             return true;
