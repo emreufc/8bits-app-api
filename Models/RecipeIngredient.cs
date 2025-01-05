@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace _8bits_app_api.Models;
 
@@ -17,9 +18,10 @@ public partial class RecipeIngredient
 
     public bool? IsDeleted { get; set; }
 
+    [JsonIgnore]
     public virtual Ingredient Ingredient { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual QuantityType QuantityType { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual Recipe Recipe { get; set; } = null!;
 }

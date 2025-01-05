@@ -43,6 +43,62 @@ namespace _8bits_app_api.Repositories
                 .ToListAsync();
             return (recipeIngredients, totalCount);
         }
+
+        public async Task AddIngredientsAsync(int recipeId, List<RecipeIngredient> ingredients)
+        {
+            foreach (var ingredient in ingredients)
+            {
+
+                // Assign the necessary values
+                ingredient.RecipeId = recipeId;
+                ingredient.IsDeleted = false; // Ensure it is not marked as deleted
+
+                // Add the ingredient to the context
+                await _context.RecipeIngredients.AddAsync(ingredient);
+            }
+
+            await _context.SaveChangesAsync(); // Save changes to the database
+        }
+
+        public async Task UpdateIngredientAsync(RecipeIngredient recipeIngredient)
+        {
+            var existingIngredient = await _context.RecipeIngredients
+                .FirstOrDefaultAsync(ri => ri.RecipeId == recipeIngredient.RecipeId 
+                                           && ri.IngredientId == recipeIngredient.IngredientId 
+                                           && !(ri.IsDeleted ?? false));
+
+            if (existingIngredient == null)
+            {
+                throw new KeyNotFoundException("RecipeIngredient not found or deleted.");
+            }
+
+            // Update the fields
+            existingIngredient.Quantity = recipeIngredient.Quantity;
+            existingIngredient.QuantityTypeId = recipeIngredient.QuantityTypeId;
+
+            // Save changes to the database
+            _context.RecipeIngredients.Update(existingIngredient);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteIngredientAsync(int recipeId, int ingredientId)
+        {
+            var recipeIngredient = await _context.RecipeIngredients
+                .FirstOrDefaultAsync(ri => ri.RecipeId == recipeId 
+                                           && ri.IngredientId == ingredientId 
+                                           && !(ri.IsDeleted ?? false));
+
+            if (recipeIngredient == null)
+            {
+                throw new KeyNotFoundException("RecipeIngredient not found or already deleted.");
+            }
+
+            // Perform soft delete
+            recipeIngredient.IsDeleted = true;
+
+            _context.RecipeIngredients.Update(recipeIngredient);
+            await _context.SaveChangesAsync();
+        }
     }
 
 }

@@ -26,6 +26,21 @@ namespace _8bits_app_api.Services
         {
             return await _recipeIngredientRepository.GetByRecipeIdPaginatedAsync(recipeId, pageNumber, pageSize);
         }
+
+        public async Task AddRecipeIngredientAsync(int recipeId, List<RecipeIngredient> ingredients)
+        {
+            await _recipeIngredientRepository.AddIngredientsAsync(recipeId, ingredients);
+        }
+
+        public async Task UpdateRecipeIngredientAsync(RecipeIngredient recipeIngredient)
+        {
+            await _recipeIngredientRepository.UpdateIngredientAsync(recipeIngredient);
+        }
+
+        public async Task DeleteRecipeIngredientAsync(int recipeId, int ingredientId)
+        {
+            await _recipeIngredientRepository.DeleteIngredientAsync(recipeId, ingredientId);
+        }
     }
 
 }
