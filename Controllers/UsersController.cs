@@ -94,7 +94,6 @@ namespace _8bits_app_api.Controllers
                 imageUrl = user.ImageUrl
             };
             
-
             return Ok(new
             {
                 code = 200,

@@ -9,5 +9,7 @@ public interface IUserService
     Task<User> GetUserByIdAsync(int userId);
     Task<bool> UpdateUserAsync(int userId, User updatedUser);
     Task<bool> DeleteUserAsync(int userId);
-    
+    Task<(IEnumerable<User> Users, int TotalCount)> SearchUsersAsync(string keyword, int pageNumber, int pageSize);
+    Task<(IEnumerable<User> Users, int TotalCount)> GetAllUsersAsync(int pageNumber, int pageSize);
+
 }

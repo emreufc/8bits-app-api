@@ -59,4 +59,14 @@ public class UserService : IUserService
         user.IsDeleted = true;
         return await _userRepository.UpdateUserAsync(user);
     }
+    
+    public async Task<(IEnumerable<User> Users, int TotalCount)> SearchUsersAsync(string keyword, int pageNumber, int pageSize)
+    {
+        return await _userRepository.SearchUsersAsync(keyword, pageNumber, pageSize);
+    }
+
+    public async Task<(IEnumerable<User> Users, int TotalCount)> GetAllUsersAsync(int pageNumber, int pageSize)
+    {
+        return await _userRepository.GetAllUsersAsync(pageNumber, pageSize);
+    }
 }

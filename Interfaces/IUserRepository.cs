@@ -10,4 +10,6 @@ public interface IUserRepository
     Task<IEnumerable<User>> GetAllUsersAsync();
     Task<bool> UserExistsAsync(string email);
     Task<bool> UpdateUserAsync(User user);
+    Task<(IEnumerable<User> Users, int TotalCount)> SearchUsersAsync(string keyword, int pageNumber, int pageSize);
+    Task<(IEnumerable<User> Users, int TotalCount)> GetAllUsersAsync(int pageNumber, int pageSize);
 }
